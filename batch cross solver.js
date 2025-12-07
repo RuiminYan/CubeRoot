@@ -1,6 +1,7 @@
 // https://or18.github.io/RubiksSolverDemo/
 // Show Analyzer, 全选Face Option
 // 从None列到x列共6列，15行，输出里面的所有内容，按列取内容,共90个值
+// Chrome按F12进入控制台输入以下内容
 // ==================== 1️⃣ 选择本地文件并读取内容 ====================
 function loadScramblesFromLocalFile() {
   return new Promise((resolve, reject) => {
