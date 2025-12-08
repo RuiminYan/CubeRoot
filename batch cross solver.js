@@ -181,8 +181,6 @@ async function batchProcess(scrambles) {
   for (let i = 0; i < scrambles.length; i++) {
     const sc = scrambles[i];
 
-    console.log(`▶ 正在分析 ${i + 1}/${scrambles.length}`);
-
     // ✅ 记录开始时间
     const startTime = performance.now();
 
@@ -197,7 +195,7 @@ async function batchProcess(scrambles) {
     const costMs = Math.round(endTime - startTime);       // 毫秒
     const costSec = (costMs / 1000).toFixed(3);           // 秒
 
-    console.log(`✅ 本条完成，读取 90/90，用时 ${costSec} 秒`);
+    console.log(`${i + 1}/${scrambles.length} 用时 ${costSec} s`);
 
     finalResults.push({
       scramble: sc,
