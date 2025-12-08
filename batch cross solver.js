@@ -211,14 +211,12 @@ async function batchProcess(scrambles) {
 
 // ==================== 6️⃣ 导出 CSV（含时间列） ====================
 function exportToCSV(data) {
-  const header = ["scramble", "time_ms", "time_sec"];
+  const header = ["scramble"];
   for (let i = 1; i <= 90; i++) header.push("v" + i);
 
   const rows = data.map(item => {
     return [
       item.scramble,
-      item.time_ms,
-      item.time_sec,
       ...item.values
     ];
   });
