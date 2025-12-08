@@ -211,8 +211,15 @@ async function batchProcess(scrambles) {
 
 // ==================== 6️⃣ 导出 CSV（含时间列） ====================
 function exportToCSV(data) {
-  const header = ["scramble"];
-  for (let i = 1; i <= 90; i++) header.push("v" + i);
+const header = ["scramble",
+
+  "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
+  "z2_None","z2_BL","z2_BR","z2_FR","z2_FL","z2_BL_BR","z2_BL_FR","z2_BL_FL","z2_BR_FR","z2_BR_FL","z2_FR_FL","z2_BL_BR_FR","z2_BL_BR_FL","z2_BL_FR_FL","z2_BR_FR_FL",
+  "z'_None","z'_BL","z'_BR","z'_FR","z'_FL","z'_BL_BR","z'_BL_FR","z'_BL_FL","z'_BR_FR","z'_BR_FL","z'_FR_FL","z'_BL_BR_FR","z'_BL_BR_FL","z'_BL_FR_FL","z'_BR_FR_FL",
+  "z_None","z_BL","z_BR","z_FR","z_FL","z_BL_BR","z_BL_FR","z_BL_FL","z_BR_FR","z_BR_FL","z_FR_FL","z_BL_BR_FR","z_BL_BR_FL","z_BL_FR_FL","z_BR_FR_FL",
+  "x'_None","x'_BL","x'_BR","x'_FR","x'_FL","x'_BL_BR","x'_BL_FR","x'_BL_FL","x'_BR_FR","x'_BR_FL","x'_FR_FL","x'_BL_BR_FR","x'_BL_BR_FL","x'_BL_FR_FL","x'_BR_FR_FL",
+  "x_None","x_BL","x_BR","x_FR","x_FL","x_BL_BR","x_BL_FR","x_BL_FL","x_BR_FR","x_BR_FL","x_FR_FL","x_BL_BR_FR","x_BL_BR_FL","x_BL_FR_FL","x_BR_FR_FL"
+];
 
   const rows = data.map(item => {
     return [
