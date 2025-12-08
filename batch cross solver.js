@@ -230,11 +230,11 @@ function exportToCSV(data) {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "scramble_results_with_time.csv";
+  a.download = "cross_stat.csv";
   a.click();
 
   URL.revokeObjectURL(url);
-  console.log("✅ CSV 已自动下载：scramble_results_with_time.csv");
+  console.log("✅ CSV 已自动下载：cross_stat.csv");
 }
 
 // ==================== 7️⃣ 主入口 ====================
