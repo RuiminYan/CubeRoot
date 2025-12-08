@@ -2,6 +2,7 @@
 // Show Analyzer, 全选Face Option
 // 从None列到x列共6列，15行，输出里面的所有内容，按列取内容,共90个值
 // Chrome按F12进入控制台输入以下内容
+
 // ==================== 1️⃣ 选择 scrambles.txt 并读取 ====================
 function loadScramblesFromLocalFile() {
   return new Promise((resolve, reject) => {
@@ -74,7 +75,6 @@ async function waitForTableComplete({
       continue;
     }
 
-    // ✅ No 列必须出现 15
     const noValues = rows.map(r =>
       parseInt(r.children[noIdx]?.innerText.trim())
     ).filter(v => !isNaN(v));
@@ -84,7 +84,6 @@ async function waitForTableComplete({
       continue;
     }
 
-    // ✅ 目标列全部非空
     const allCellsPresent = rows.slice(0, expectedRows).every(row =>
       colIndices.every(ci => {
         const c = row.children[ci];
@@ -98,8 +97,6 @@ async function waitForTableComplete({
 
     await new Promise(r => setTimeout(r, 200));
   }
-
-  console.warn("⚠️ 等待表格短超时，进入持续等待模式");
 
   const table = document.querySelector("table");
   const headerCells = table ? Array.from(
@@ -141,11 +138,8 @@ async function stableReadTable({
 } = {}) {
 
   const expectedTotal = expectedRows * columns.length;
-  let round = 0;
 
   while (true) {
-    round++;
-
     const tableInfo = await waitForTableComplete({
       timeout: shortWaitTimeout,
       expectedRows,
@@ -155,17 +149,13 @@ async function stableReadTable({
     const values = readNumbersByColumns(tableInfo);
     const validCount = values.filter(v => v !== null).length;
 
-    if (validCount === expectedTotal) {
-      if (round > 1) console.log(`✅ 本条最终成功（重试 ${round - 1} 次）`);
-      return values;
-    }
+    if (validCount === expectedTotal) return values;
 
-    console.warn(`⚠️ 不完整 ${validCount}/${expectedTotal}，继续等待（第 ${round} 轮）`);
     await new Promise(r => setTimeout(r, pauseBetweenChecks));
   }
 }
 
-// ==================== 5️⃣ 批量处理（加入单条耗时统计） ====================
+// ==================== 5️⃣ 批量处理（加入单条用时统计 + 总用时） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -178,10 +168,12 @@ async function batchProcess(scrambles) {
 
   const finalResults = [];
 
+  // ✅✅✅ 总开始时间
+  const totalStart = performance.now();
+
   for (let i = 0; i < scrambles.length; i++) {
     const sc = scrambles[i];
 
-    // ✅ 记录开始时间
     const startTime = performance.now();
 
     input.value = sc;
@@ -190,12 +182,11 @@ async function batchProcess(scrambles) {
 
     const values = await stableReadTable();
 
-    // ✅ 记录结束时间
     const endTime = performance.now();
-    const costMs = Math.round(endTime - startTime);       // 毫秒
-    const costSec = (costMs / 1000).toFixed(3);           // 秒
+    const costMs = Math.round(endTime - startTime);
+    const costSec = (costMs / 1000).toFixed(3);
 
-    console.log(`${i + 1}/${scrambles.length} 用时 ${costSec} s`);
+    console.log(`${i + 1} 用时 ${costSec}s`);
 
     finalResults.push({
       scramble: sc,
@@ -205,12 +196,18 @@ async function batchProcess(scrambles) {
     });
   }
 
-  console.log("✅ 全部完成");
-  exportToCSV(finalResults);
+  // ✅✅✅ 统计总用时
+  const totalEnd = performance.now();
+  const totalMs = Math.round(totalEnd - totalStart);
+  const totalSec = (totalMs / 1000).toFixed(3);
+
+  console.log(`⏱ 总用时：${totalSec}s`);
+
+  exportToCSV(finalResults, totalMs, totalSec);
 }
 
-// ==================== 6️⃣ 导出 CSV（含时间列） ====================
-function exportToCSV(data) {
+// ==================== 6️⃣ 导出 CSV（含总用时） ====================
+function exportToCSV(data, totalMs, totalSec) {
 const header = ["scramble",
 
   "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
@@ -241,6 +238,7 @@ const header = ["scramble",
   a.click();
 
   URL.revokeObjectURL(url);
+
   console.log("✅ CSV 已自动下载：cross_stat.csv");
 }
 
