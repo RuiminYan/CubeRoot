@@ -74,7 +74,7 @@ async function waitForTableComplete({
       continue;
     }
 
-    // ✅ No 列必须出现 15
+    // ✅ 关键判据：No 列必须出现 15
     const noValues = rows.map(r =>
       parseInt(r.children[noIdx]?.innerText.trim())
     ).filter(v => !isNaN(v));
@@ -84,7 +84,7 @@ async function waitForTableComplete({
       continue;
     }
 
-    // ✅ 目标列全部非空
+    // ✅ 目标列必须全部非空
     const allCellsPresent = rows.slice(0, expectedRows).every(row =>
       colIndices.every(ci => {
         const c = row.children[ci];
@@ -100,7 +100,6 @@ async function waitForTableComplete({
   }
 
   console.warn("⚠️ 等待表格短超时，进入持续等待模式");
-
   const table = document.querySelector("table");
   const headerCells = table ? Array.from(
     table.querySelectorAll("thead th, tr:first-child th, tr:first-child td")
@@ -165,7 +164,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（加入单条耗时统计） ====================
+// ==================== 5️⃣ 批量处理（不再逐条输出 90 个） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -182,9 +181,7 @@ async function batchProcess(scrambles) {
     const sc = scrambles[i];
 
     console.log(`▶ 正在分析 ${i + 1}/${scrambles.length}`);
-
-    // ✅ 记录开始时间
-    const startTime = performance.now();
+    console.log(sc);
 
     input.value = sc;
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -192,17 +189,11 @@ async function batchProcess(scrambles) {
 
     const values = await stableReadTable();
 
-    // ✅ 记录结束时间
-    const endTime = performance.now();
-    const costMs = Math.round(endTime - startTime);       // 毫秒
-    const costSec = (costMs / 1000).toFixed(3);           // 秒
-
-    console.log(`✅ 本条完成，读取 90/90，用时 ${costSec} 秒`);
+    // ✅ 现在不再输出 90 个数组
+    console.log(`✅ 本条完成，读取 ${values.length}/90`);
 
     finalResults.push({
       scramble: sc,
-      time_ms: costMs,
-      time_sec: costSec,
       values
     });
   }
@@ -211,18 +202,13 @@ async function batchProcess(scrambles) {
   exportToCSV(finalResults);
 }
 
-// ==================== 6️⃣ 导出 CSV（含时间列） ====================
+// ==================== 6️⃣ 导出 CSV ====================
 function exportToCSV(data) {
-  const header = ["scramble", "time_ms", "time_sec"];
+  const header = ["scramble"];
   for (let i = 1; i <= 90; i++) header.push("v" + i);
 
   const rows = data.map(item => {
-    return [
-      item.scramble,
-      item.time_ms,
-      item.time_sec,
-      ...item.values
-    ];
+    return [item.scramble, ...item.values];
   });
 
   const csv = [header, ...rows]
@@ -234,11 +220,11 @@ function exportToCSV(data) {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "scramble_results_with_time.csv";
+  a.download = "scramble_results.csv";
   a.click();
 
   URL.revokeObjectURL(url);
-  console.log("✅ CSV 已自动下载：scramble_results_with_time.csv");
+  console.log("✅ CSV 已自动下载：scramble_results.csv");
 }
 
 // ==================== 7️⃣ 主入口 ====================
