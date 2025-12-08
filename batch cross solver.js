@@ -205,7 +205,7 @@ async function batchProcess(scrambles) {
     });
   }
 
-  console.log("✅ ✅ ✅ 全部完成");
+  console.log("✅ 全部完成");
   exportToCSV(finalResults);
 }
 
