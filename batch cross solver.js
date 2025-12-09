@@ -239,8 +239,6 @@ const header = ["scramble",
   a.click();
 
   URL.revokeObjectURL(url);
-
-  console.log("✅ 已下载：cross_stat.csv");
 }
 
 // ==================== 7️⃣ 主入口 ====================
