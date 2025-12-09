@@ -155,7 +155,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（加入单条用时 + 总用时 + 完成时刻） ====================
+// ==================== 5️⃣ 批量处理（时间不写 CSV，控制台只显示总完成时刻） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -199,25 +199,26 @@ async function batchProcess(scrambles) {
   const totalMs = Math.round(totalEnd - totalStart);
   const totalSec = (totalMs / 1000).toFixed(3);
 
-  // ✅ 输出完成时刻（控制台）格式：YYYY-MM-DD HH:MM:SS
+  // 输出完成时间
   const now = new Date();
   const formattedTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ` +
                         `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
   console.log(`⏰ 完成时间：${formattedTime}, 总用时：${totalSec}s`);
+
   exportToCSV(finalResults);
 }
 
-// ==================== 6️⃣ 导出 CSV ====================
+// ==================== 6️⃣ 导出 CSV（无双引号） ====================
 function exportToCSV(data) {
-const header = ["scramble",
+  const header = ["scramble",
 
-  "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
-  "z2_None","z2_BL","z2_BR","z2_FR","z2_FL","z2_BL_BR","z2_BL_FR","z2_BL_FL","z2_BR_FR","z2_BR_FL","z2_FR_FL","z2_BL_BR_FR","z2_BL_BR_FL","z2_BL_FR_FL","z2_BR_FR_FL",
-  "z'_None","z'_BL","z'_BR","z'_FR","z'_FL","z'_BL_BR","z'_BL_FR","z'_BL_FL","z'_BR_FR","z'_BR_FL","z'_FR_FL","z'_BL_BR_FR","z'_BL_BR_FL","z'_BL_FR_FL","z'_BR_FR_FL",
-  "z_None","z_BL","z_BR","z_FR","z_FL","z_BL_BR","z_BL_FR","z_BL_FL","z_BR_FR","z_BR_FL","z_FR_FL","z_BL_BR_FR","z_BL_BR_FL","z_BL_FR_FL","z_BR_FR_FL",
-  "x'_None","x'_BL","x'_BR","x'_FR","x'_FL","x'_BL_BR","x'_BL_FR","x'_BL_FL","x'_BR_FR","x'_BR_FL","x'_FR_FL","x'_BL_BR_FR","x'_BL_BR_FL","x'_BL_FR_FL","x'_BR_FR_FL",
-  "x_None","x_BL","x_BR","x_FR","x_FL","x_BL_BR","x_BL_FR","x_BL_FL","x_BR_FR","x_BR_FL","x_FR_FL","x_BL_BR_FR","x_BL_BR_FL","x_BL_FR_FL","x_BR_FR_FL"
-];
+    "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
+    "z2_None","z2_BL","z2_BR","z2_FR","z2_FL","z2_BL_BR","z2_BL_FR","z2_BL_FL","z2_BR_FR","z2_BR_FL","z2_FR_FL","z2_BL_BR_FR","z2_BL_BR_FL","z2_BL_FR_FL","z2_BR_FR_FL",
+    "z'_None","z'_BL","z'_BR","z'_FR","z'_FL","z'_BL_BR","z'_BL_FR","z'_BL_FL","z'_BR_FR","z'_BR_FL","z'_FR_FL","z'_BL_BR_FR","z'_BL_BR_FL","z'_BL_FR_FL","z'_BR_FR_FL",
+    "z_None","z_BL","z_BR","z_FR","z_FL","z_BL_BR","z_BL_FR","z_BL_FL","z_BR_FR","z_BR_FL","z_FR_FL","z_BL_BR_FR","z_BL_BR_FL","z_BL_FR_FL","z_BR_FR_FL",
+    "x'_None","x'_BL","x'_BR","x'_FR","x'_FL","x'_BL_BR","x'_BL_FR","x'_BL_FL","x'_BR_FR","x'_BR_FL","x'_FR_FL","x'_BL_BR_FR","x'_BL_BR_FL","x'_BL_FR_FL","x'_BR_FR_FL",
+    "x_None","x_BL","x_BR","x_FR","x_FL","x_BL_BR","x_BL_FR","x_BL_FL","x_BR_FR","x_BR_FL","x_FR_FL","x_BL_BR_FR","x_BL_BR_FL","x_BL_FR_FL","x_BR_FR_FL"
+  ];
 
   const rows = data.map(item => {
     return [
@@ -227,7 +228,7 @@ const header = ["scramble",
   });
 
   const csv = [header, ...rows]
-    .map(r => r.map(v => `"${v}"`).join(","))
+    .map(r => r.map(v => `${v}`).join(","))   // ← 无双引号
     .join("\n");
 
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
