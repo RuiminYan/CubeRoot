@@ -155,7 +155,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（加入单条用时统计 + 总用时） ====================
+// ==================== 5️⃣ 批量处理（加入单条用时 + 总用时 + 完成时刻） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -168,7 +168,6 @@ async function batchProcess(scrambles) {
 
   const finalResults = [];
 
-  // ✅✅✅ 总开始时间
   const totalStart = performance.now();
 
   for (let i = 0; i < scrambles.length; i++) {
@@ -186,7 +185,7 @@ async function batchProcess(scrambles) {
     const costMs = Math.round(endTime - startTime);
     const costSec = (costMs / 1000).toFixed(3);
 
-    console.log(`${i + 1} 用时 ${costSec}s`);
+    console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
     finalResults.push({
       scramble: sc,
@@ -196,18 +195,20 @@ async function batchProcess(scrambles) {
     });
   }
 
-  // ✅✅✅ 统计总用时
   const totalEnd = performance.now();
   const totalMs = Math.round(totalEnd - totalStart);
   const totalSec = (totalMs / 1000).toFixed(3);
 
-  console.log(`⏱ 总用时：${totalSec}s`);
-
-  exportToCSV(finalResults, totalMs, totalSec);
+  // ✅ 输出完成时刻（控制台）格式：YYYY-MM-DD HH:MM:SS
+  const now = new Date();
+  const formattedTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ` +
+                        `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  console.log(`⏰ 完成时间：${formattedTime}, 总耗时：${totalSec}s`);
+  exportToCSV(finalResults);
 }
 
-// ==================== 6️⃣ 导出 CSV（含总用时） ====================
-function exportToCSV(data, totalMs, totalSec) {
+// ==================== 6️⃣ 导出 CSV ====================
+function exportToCSV(data) {
 const header = ["scramble",
 
   "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
@@ -239,7 +240,7 @@ const header = ["scramble",
 
   URL.revokeObjectURL(url);
 
-  console.log("✅ CSV 已自动下载：cross_stat.csv");
+  console.log("✅ 已下载：cross_stat.csv");
 }
 
 // ==================== 7️⃣ 主入口 ====================
