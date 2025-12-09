@@ -153,7 +153,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（新增：每1000条写入并清空内存） ====================
+// ==================== 5️⃣ 批量处理（优化内存；只在最后输出一次 CSV） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -164,20 +164,20 @@ async function batchProcess(scrambles) {
     return;
   }
 
-  const finalResults = [];
+  let csvBuffer = "";
+  let processed = 0;
 
-  // === 新增 === 生成文件名（所有批次写入同一个文件，不覆盖）
-  const now = new Date();
-  const filenameTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_` +
-                       `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}-${String(now.getSeconds()).padStart(2,'0')}`;
-  const filename = `cross_stat_${filenameTime}.csv`;
+  const startTime = new Date();
+  const filenameTime = `${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}_` +
+                       `${String(startTime.getHours()).padStart(2,'0')}-${String(startTime.getMinutes()).padStart(2,'0')}-${String(startTime.getSeconds()).padStart(2,'0')}`;
+  const finalFilename = `cross_stat_${filenameTime}.csv`;
 
-  const totalStart = performance.now();
+  const globalStart = performance.now();
 
   for (let i = 0; i < scrambles.length; i++) {
     const sc = scrambles[i];
 
-    const startTime = performance.now();
+    const t0 = performance.now();
 
     input.value = sc;
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -185,48 +185,31 @@ async function batchProcess(scrambles) {
 
     const values = await stableReadTable();
 
-    const endTime = performance.now();
-    const costMs = Math.round(endTime - startTime);
-    const costSec = (costMs / 1000).toFixed(3);
+    const t1 = performance.now();
+    const costSec = ((t1 - t0) / 1000).toFixed(3);
 
     console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
-    finalResults.push([
-      sc,
-      ...values
-    ]);
+    // 写入一行 CSV
+    csvBuffer += `${sc},${values.join(",")}\n`;
+    processed++;
 
-    // ========== ⭐⭐⭐ 新增：每 1000 条写入然后清空 ==========  
-    if ((i + 1) % 1000 === 0) {
-      appendCSV_NoHeader(finalResults, filename);
-      finalResults.length = 0; // 清空
-      console.log(`💾 已写入 ${i + 1} 条（内存已释放）`);
+    if (processed % 1000 === 0) {
+      console.log(`💾 内存优化提示：已处理 ${processed} 条，数据已写入缓冲区`);
     }
   }
 
-  // 最后一批不足1000条
-  if (finalResults.length > 0) {
-    appendCSV_NoHeader(finalResults, filename);
-    console.log(`💾 已写入全部 ${scrambles.length} 条`);
-  }
+  // 全部处理完毕，写出唯一的 CSV
+  downloadCSVBuffer(csvBuffer, finalFilename);
 
-  const totalEnd = performance.now();
-  const totalSec = ((totalEnd - totalStart) / 1000).toFixed(3);
-
-  const finishTime =
-    `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ` +
-    `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
-
-  console.log(`⏰ 完成时间：${finishTime}, 总用时：${totalSec}s`);
+  const globalEnd = performance.now();
+  const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
+  console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
-// ==================== 6️⃣ 追加写入 CSV（无表头） ====================
-function appendCSV_NoHeader(rows, filename) {
-  const csv = rows
-    .map(r => r.map(v => `${v}`).join(","))
-    .join("\n");
-
-  const blob = new Blob([csv + "\n"], { type: "text/csv;charset=utf-8;" });
+// ==================== 6️⃣ 最终下载 CSV（唯一一次下载） ====================
+function downloadCSVBuffer(csvBuffer, filename) {
+  const blob = new Blob([csvBuffer], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement("a");
