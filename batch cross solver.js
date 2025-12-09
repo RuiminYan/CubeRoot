@@ -66,9 +66,7 @@ async function waitForTableComplete({
       continue;
     }
 
-    const rows = Array.from(
-      table.querySelectorAll("tbody tr, tr")
-    ).slice(1);
+    const rows = Array.from(table.querySelectorAll("tbody tr, tr")).slice(1);
 
     if (rows.length < expectedRows) {
       await new Promise(r => setTimeout(r, 200));
@@ -155,7 +153,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（时间不写 CSV，控制台只显示总完成时刻） ====================
+// ==================== 5️⃣ 批量处理（新增：每1000条写入并清空内存） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -167,6 +165,12 @@ async function batchProcess(scrambles) {
   }
 
   const finalResults = [];
+
+  // === 新增 === 生成文件名（所有批次写入同一个文件，不覆盖）
+  const now = new Date();
+  const filenameTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_` +
+                       `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}-${String(now.getSeconds()).padStart(2,'0')}`;
+  const filename = `cross_stat_${filenameTime}.csv`;
 
   const totalStart = performance.now();
 
@@ -187,61 +191,47 @@ async function batchProcess(scrambles) {
 
     console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
-    finalResults.push({
-      scramble: sc,
-      time_ms: costMs,
-      time_sec: costSec,
-      values
-    });
+    finalResults.push([
+      sc,
+      ...values
+    ]);
+
+    // ========== ⭐⭐⭐ 新增：每 1000 条写入然后清空 ==========  
+    if ((i + 1) % 1000 === 0) {
+      appendCSV_NoHeader(finalResults, filename);
+      finalResults.length = 0; // 清空
+      console.log(`💾 已写入 ${i + 1} 条（内存已释放）`);
+    }
+  }
+
+  // 最后一批不足1000条
+  if (finalResults.length > 0) {
+    appendCSV_NoHeader(finalResults, filename);
+    console.log(`💾 已写入全部 ${scrambles.length} 条`);
   }
 
   const totalEnd = performance.now();
-  const totalMs = Math.round(totalEnd - totalStart);
-  const totalSec = (totalMs / 1000).toFixed(3);
+  const totalSec = ((totalEnd - totalStart) / 1000).toFixed(3);
 
-  // 输出完成时间
-  const now = new Date();
-  const formattedTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ` +
-                        `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  console.log(`⏰ 完成时间：${formattedTime}, 总用时：${totalSec}s`);
+  const finishTime =
+    `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ` +
+    `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
 
-  exportToCSV(finalResults);
+  console.log(`⏰ 完成时间：${finishTime}, 总用时：${totalSec}s`);
 }
 
-// ==================== 6️⃣ 导出 CSV（无双引号） ====================
-function exportToCSV(data) {
-  const header = ["scramble",
-
-    "None_None","None_BL","None_BR","None_FR","None_FL","None_BL_BR","None_BL_FR","None_BL_FL","None_BR_FR","None_BR_FL","None_FR_FL","None_BL_BR_FR","None_BL_BR_FL","None_BL_FR_FL","None_BR_FR_FL",
-    "z2_None","z2_BL","z2_BR","z2_FR","z2_FL","z2_BL_BR","z2_BL_FR","z2_BL_FL","z2_BR_FR","z2_BR_FL","z2_FR_FL","z2_BL_BR_FR","z2_BL_BR_FL","z2_BL_FR_FL","z2_BR_FR_FL",
-    "z'_None","z'_BL","z'_BR","z'_FR","z'_FL","z'_BL_BR","z'_BL_FR","z'_BL_FL","z'_BR_FR","z'_BR_FL","z'_FR_FL","z'_BL_BR_FR","z'_BL_BR_FL","z'_BL_FR_FL","z'_BR_FR_FL",
-    "z_None","z_BL","z_BR","z_FR","z_FL","z_BL_BR","z_BL_FR","z_BL_FL","z_BR_FR","z_BR_FL","z_FR_FL","z_BL_BR_FR","z_BL_BR_FL","z_BL_FR_FL","z_BR_FR_FL",
-    "x'_None","x'_BL","x'_BR","x'_FR","x'_FL","x'_BL_BR","x'_BL_FR","x'_BL_FL","x'_BR_FR","x'_BR_FL","x'_FR_FL","x'_BL_BR_FR","x'_BL_BR_FL","x'_BL_FR_FL","x'_BR_FR_FL",
-    "x_None","x_BL","x_BR","x_FR","x_FL","x_BL_BR","x_BL_FR","x_BL_FL","x_BR_FR","x_BR_FL","x_FR_FL","x_BL_BR_FR","x_BL_BR_FL","x_BL_FR_FL","x_BR_FR_FL"
-  ];
-
-  const rows = data.map(item => {
-    return [
-      item.scramble,
-      ...item.values
-    ];
-  });
-
-  const csv = [header, ...rows]
+// ==================== 6️⃣ 追加写入 CSV（无表头） ====================
+function appendCSV_NoHeader(rows, filename) {
+  const csv = rows
     .map(r => r.map(v => `${v}`).join(","))
     .join("\n");
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([csv + "\n"], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
-
-  // 生成带时间的文件名
-  const now = new Date();
-  const filenameTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_` +
-                       `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}-${String(now.getSeconds()).padStart(2,'0')}`;
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `cross_stat_${filenameTime}.csv`;   // ← 改这里
+  a.download = filename;
   a.click();
 
   URL.revokeObjectURL(url);
