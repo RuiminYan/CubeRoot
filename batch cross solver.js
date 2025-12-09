@@ -228,15 +228,20 @@ function exportToCSV(data) {
   });
 
   const csv = [header, ...rows]
-    .map(r => r.map(v => `${v}`).join(","))   // ← 无双引号
+    .map(r => r.map(v => `${v}`).join(","))
     .join("\n");
 
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
+  // 生成带时间的文件名
+  const now = new Date();
+  const filenameTime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_` +
+                       `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}-${String(now.getSeconds()).padStart(2,'0')}`;
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = "cross_stat.csv";
+  a.download = `cross_stat_${filenameTime}.csv`;   // ← 改这里
   a.click();
 
   URL.revokeObjectURL(url);
