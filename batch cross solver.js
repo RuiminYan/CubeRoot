@@ -153,7 +153,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（优化内存；只在最后输出一次 CSV） ====================
+// ==================== 5️⃣ 批量处理（每处理 2000 条生成 CSV 并释放内存） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -166,11 +166,12 @@ async function batchProcess(scrambles) {
 
   let csvBuffer = "";
   let processed = 0;
+  let filePart = 1;
 
+  // 固定时间戳
   const startTime = new Date();
   const filenameTime = `${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}_` +
                        `${String(startTime.getHours()).padStart(2,'0')}-${String(startTime.getMinutes()).padStart(2,'0')}-${String(startTime.getSeconds()).padStart(2,'0')}`;
-  const finalFilename = `cross_stat_${filenameTime}.csv`;
 
   const globalStart = performance.now();
 
@@ -194,20 +195,21 @@ async function batchProcess(scrambles) {
     csvBuffer += `${sc},${values.join(",")}\n`;
     processed++;
 
-    if (processed % 1000 === 0) {
-      console.log(`💾 内存优化提示：已处理 ${processed} 条，数据已写入缓冲区`);
+    if (processed % 2000 === 0 || i === scrambles.length - 1) {
+      const partFilename = `cross_stat_${filenameTime}_part${filePart}.csv`;
+      downloadCSVBuffer(csvBuffer, partFilename);
+      console.log(`💾 已生成 ${partFilename}，释放内存`);
+      csvBuffer = ""; // 清空缓冲
+      filePart++;
     }
   }
-
-  // 全部处理完毕，写出唯一的 CSV
-  downloadCSVBuffer(csvBuffer, finalFilename);
 
   const globalEnd = performance.now();
   const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
   console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
-// ==================== 6️⃣ 最终下载 CSV（唯一一次下载） ====================
+// ==================== 6️⃣ 下载 CSV ====================
 function downloadCSVBuffer(csvBuffer, filename) {
   const blob = new Blob([csvBuffer], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
