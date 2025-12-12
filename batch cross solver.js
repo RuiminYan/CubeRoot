@@ -210,8 +210,8 @@ async function batchProcess(scrambles) {
         const costMs = t1 - t0; // 计算毫秒数
         const costSec = (costMs / 1000).toFixed(3);
 
-        // 🔔 检查是否为警告（小于 1999 毫秒）
-        if (costMs < 1999) {
+        // 🔔 检查是否为警告（小于 1499 毫秒）
+        if (costMs < 1499) {
             warningCount++;
         }
 
@@ -240,7 +240,7 @@ async function batchProcess(scrambles) {
     const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
     
     // 🔔 在最终输出前，输出警告次数
-    console.warn(`⚠️ 警告：共有 ${warningCount} 次运算用时小于1.999s。`);
+    console.warn(`⚠️ 警告：共有 ${warningCount} 次运算用时小于1.499s。`);
     console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
