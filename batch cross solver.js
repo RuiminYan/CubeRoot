@@ -165,60 +165,72 @@ async function stableReadTable({
 
 // ==================== 5️⃣ 批量处理（仅输出编号 + 90列） ====================
 async function batchProcess(scrambles) {
-  const input = document.querySelector("textarea");
-  const analyzeBtn = [...document.querySelectorAll("button")]
-    .find(b => b.innerText.toLowerCase().includes("analy"));
+    const input = document.querySelector("textarea");
+    const analyzeBtn = [...document.querySelectorAll("button")]
+      .find(b => b.innerText.toLowerCase().includes("analy"));
 
-  if (!input || !analyzeBtn) {
-    console.error("❌ 找不到 Scramble 输入框 或 Analyze 按钮");
-    return;
-  }
-
-  const baseName = prompt("请输入导出的文件名称（无需扩展名）:", "cross_stat");
-  if (!baseName) {
-    console.error("❌ 未输入名称，已取消");
-    return;
-  }
-
-  let csvBuffer = "";
-  let processed = 0;
-  let filePart = 1;
-
-  const globalStart = performance.now();
-
-  for (let i = 0; i < scrambles.length; i++) {
-    const { id, scramble } = scrambles[i];
-
-    const t0 = performance.now();
-
-    input.value = scramble;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-    analyzeBtn.click();
-
-    const values = await stableReadTable();
-
-    const t1 = performance.now();
-    const costSec = ((t1 - t0) / 1000).toFixed(3);
-
-    console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
-
-    // ⚠️ 最终要求：只输出「编号 + 90列」
-    csvBuffer += `${id},${values.join(",")}\n`;
-
-    processed++;
-
-    if (processed % 2000 === 0 || i === scrambles.length - 1) {
-      const partFilename = `${baseName}_part${filePart}.csv`;
-      downloadCSVBuffer(csvBuffer, partFilename);
-      console.log(`💾 已生成 ${partFilename}，释放内存`);
-      csvBuffer = "";
-      filePart++;
+    if (!input || !analyzeBtn) {
+        console.error("❌ 找不到 Scramble 输入框 或 Analyze 按钮");
+        return;
     }
-  }
 
-  const globalEnd = performance.now();
-  const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
-  console.log(`⏰ 总共用时: ${totalSec}s`);
+    const baseName = prompt("请输入导出的文件名称（无需扩展名）:", "cross_stat");
+    if (!baseName) {
+        console.error("❌ 未输入名称，已取消");
+        return;
+    }
+
+    let csvBuffer = "";
+    let processed = 0;
+    let filePart = 1;
+
+    const globalStart = performance.now();
+
+    for (let i = 0; i < scrambles.length; i++) {
+        const { id, scramble } = scrambles[i];
+
+        const t0 = performance.now();
+
+        // **步骤 1：同步操作，无需延迟**
+        input.value = scramble;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        analyzeBtn.click();
+
+        // 🟢 延迟 1：等待页面开始计算和渲染 (例如 50ms)
+        // 这是为了确保点击事件已完全处理，网站开始加载数据
+        await new Promise(r => setTimeout(r, 50)); 
+        
+        // 步骤 2：核心等待，等待表格数据完全加载 (stableReadTable内部有自己的等待逻辑)
+        const values = await stableReadTable();
+
+        const t1 = performance.now();
+        const costSec = ((t1 - t0) / 1000).toFixed(3);
+
+        console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
+
+        // ⚠️ 最终要求：只输出「编号 + 90列」
+        csvBuffer += `${id},${values.join(",")}\n`;
+
+        processed++;
+
+        if (processed % 2000 === 0 || i === scrambles.length - 1) {
+            const partFilename = `${baseName}_part${filePart}.csv`;
+            downloadCSVBuffer(csvBuffer, partFilename);
+            console.log(`💾 已生成 ${partFilename}，释放内存`);
+            csvBuffer = "";
+            filePart++;
+        }
+        
+        // 🟢 延迟 2：在完成当前打乱的全部工作后稍作休息 (例如 100ms)
+        // 这对于缓解浏览器在批量处理时的压力非常有用
+        if (i < scrambles.length - 1) { // 最后一个不需要休息
+             await new Promise(r => setTimeout(r, 100)); 
+        }
+    }
+
+    const globalEnd = performance.now();
+    const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
+    console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
 // ==================== 6️⃣ 下载 CSV ====================
