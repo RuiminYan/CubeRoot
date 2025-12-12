@@ -183,6 +183,8 @@ async function batchProcess(scrambles) {
     let csvBuffer = "";
     let processed = 0;
     let filePart = 1;
+    // 🔔 增加警告计数器
+    let warningCount = 0;
 
     const globalStart = performance.now();
 
@@ -198,14 +200,20 @@ async function batchProcess(scrambles) {
         // 2. 同步操作：点击分析按钮，触发计算
         analyzeBtn.click();
 
-        // 🟢 延迟 1 (50ms): 防御性延迟，确保点击事件处理完毕并启动网站的异步计算任务
+        // 🟢 延迟 1 (50ms): 防御性延迟
         await new Promise(r => setTimeout(r, 50)); 
         
-        // 3. 核心等待：等待表格数据完全加载（包含长时间轮询）
+        // 3. 核心等待：等待表格数据完全加载
         const values = await stableReadTable();
 
         const t1 = performance.now();
-        const costSec = ((t1 - t0) / 1000).toFixed(3);
+        const costMs = t1 - t0; // 计算毫秒数
+        const costSec = (costMs / 1000).toFixed(3);
+
+        // 🔔 检查是否为警告（小于 1999 毫秒）
+        if (costMs < 1999) {
+            warningCount++;
+        }
 
         console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
@@ -222,7 +230,7 @@ async function batchProcess(scrambles) {
             filePart++;
         }
         
-        // 🟢 延迟 2 (100ms)：循环间歇休息，缓解浏览器在批量处理时的压力
+        // 🟢 延迟 2 (100ms)：循环间歇休息
         if (i < scrambles.length - 1) { 
              await new Promise(r => setTimeout(r, 100)); 
         }
@@ -230,6 +238,9 @@ async function batchProcess(scrambles) {
 
     const globalEnd = performance.now();
     const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
+    
+    // 🔔 在最终输出前，输出警告次数
+    console.warn(`⚠️ 警告：共有 ${warningCount} 次运算用时小于1.999s。`);
     console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
