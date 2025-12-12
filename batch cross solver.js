@@ -20,8 +20,18 @@ function loadScramblesFromLocalFile() {
           .map(l => l.trim())
           .filter(l => l);
 
-        console.log(`✅ 已加载 ${lines.length} 条打乱`);
-        resolve(lines);
+        console.log(`✅ 已加载 ${lines.length} 条记录（含编号 + 打乱）`);
+
+        // 解析成 { id, scramble }
+        const parsed = lines.map(l => {
+          const parts = l.split(",");
+          return {
+            id: parts[0].trim(),
+            scramble: parts[1].trim()
+          };
+        });
+
+        resolve(parsed);
       };
       reader.onerror = () => reject("读取文件失败");
       reader.readAsText(file);
@@ -153,7 +163,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（加入名称弹窗 & 删除第一列） ====================
+// ==================== 5️⃣ 批量处理（仅输出编号 + 90列） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -164,7 +174,6 @@ async function batchProcess(scrambles) {
     return;
   }
 
-  // ⬅️ 唯一新增：文件名弹窗
   const baseName = prompt("请输入导出的文件名称（无需扩展名）:", "cross_stat");
   if (!baseName) {
     console.error("❌ 未输入名称，已取消");
@@ -178,11 +187,11 @@ async function batchProcess(scrambles) {
   const globalStart = performance.now();
 
   for (let i = 0; i < scrambles.length; i++) {
-    const sc = scrambles[i];
+    const { id, scramble } = scrambles[i];
 
     const t0 = performance.now();
 
-    input.value = sc;
+    input.value = scramble;
     input.dispatchEvent(new Event("input", { bubbles: true }));
     analyzeBtn.click();
 
@@ -193,8 +202,8 @@ async function batchProcess(scrambles) {
 
     console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
-    // ⬅️⬅️⬅️ 改动：只输出 90 列（不输出打乱）
-    csvBuffer += `${values.join(",")}\n`;
+    // ⚠️ 最终要求：只输出「编号 + 90列」
+    csvBuffer += `${id},${values.join(",")}\n`;
 
     processed++;
 
