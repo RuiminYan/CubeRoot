@@ -153,7 +153,7 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（每处理 2000 条生成 CSV 并释放内存） ====================
+// ==================== 5️⃣ 批量处理（加入名称弹窗 & 删除第一列） ====================
 async function batchProcess(scrambles) {
   const input = document.querySelector("textarea");
   const analyzeBtn = [...document.querySelectorAll("button")]
@@ -164,14 +164,16 @@ async function batchProcess(scrambles) {
     return;
   }
 
+  // ⬅️ 唯一新增：文件名弹窗
+  const baseName = prompt("请输入导出的文件名称（无需扩展名）:", "cross_stat");
+  if (!baseName) {
+    console.error("❌ 未输入名称，已取消");
+    return;
+  }
+
   let csvBuffer = "";
   let processed = 0;
   let filePart = 1;
-
-  // 固定时间戳
-  const startTime = new Date();
-  const filenameTime = `${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}_` +
-                       `${String(startTime.getHours()).padStart(2,'0')}-${String(startTime.getMinutes()).padStart(2,'0')}-${String(startTime.getSeconds()).padStart(2,'0')}`;
 
   const globalStart = performance.now();
 
@@ -191,15 +193,16 @@ async function batchProcess(scrambles) {
 
     console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
-    // 写入一行 CSV
-    csvBuffer += `${sc},${values.join(",")}\n`;
+    // ⬅️⬅️⬅️ 改动：只输出 90 列（不输出打乱）
+    csvBuffer += `${values.join(",")}\n`;
+
     processed++;
 
     if (processed % 2000 === 0 || i === scrambles.length - 1) {
-      const partFilename = `cross_stat_${filenameTime}_part${filePart}.csv`;
+      const partFilename = `${baseName}_part${filePart}.csv`;
       downloadCSVBuffer(csvBuffer, partFilename);
       console.log(`💾 已生成 ${partFilename}，释放内存`);
-      csvBuffer = ""; // 清空缓冲
+      csvBuffer = "";
       filePart++;
     }
   }
