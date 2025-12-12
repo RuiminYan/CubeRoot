@@ -191,8 +191,7 @@ async function batchProcess(scrambles) {
 
         // 1. 同步操作：输入打乱步骤
         input.value = scramble;
-        // 优化：移除 dispatchEvent，简化代码
-        // input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("input", { bubbles: true }));
         
         // 2. 同步操作：点击分析按钮，触发计算
         analyzeBtn.click();
