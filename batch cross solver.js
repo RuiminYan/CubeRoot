@@ -224,7 +224,7 @@ async function batchProcess(scrambles) {
         processed++;
 
         if (processed % 2000 === 0 || i === scrambles.length - 1) {
-            const partFilename = `${baseName}_part${filePart}.csv`;
+            const partFilename = `${baseName}_part_${filePart}.csv`;
             downloadCSVBuffer(csvBuffer, partFilename);
             console.log(`💾 已生成 ${partFilename}，释放内存`);
             csvBuffer = "";
