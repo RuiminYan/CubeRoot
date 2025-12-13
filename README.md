@@ -31,18 +31,7 @@
 
 1.  打开批量求解网站：[https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)
     
-2.  将 `batch cross solver.js` 代码复制并粘贴到 **Chrome 控制台 (Console)** 中执行。
-    
-3.  **指定输出文件名前缀**（例如：`xxx`）。
-    
-4.  脚本会自动运行求解，结果会自动导出为多个 CSV 文件。
-    
-    -   每个导出文件包含 **2000 行**数据。
-        
-    -   文件名自动设定为 `xxx_part1.csv`、`xxx_part2.csv` 等。
-        
-5.  将所有导出的 CSV 文件移动到 **`output`** 文件夹。
-    
+2.  将 `batch cross solver.js` 代码复制并粘贴到 **Chrome 控制台 (Console)** 中执行，脚本会自动运行求解并自动导出为多个 CSV 文件，将它们移动到 `output` 文件夹。
 
 ## 2\. 📝 数据结构化与导入
 
