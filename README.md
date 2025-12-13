@@ -4,7 +4,7 @@
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
-### A. 导出数据
+### A. 下载并导出数据
 
 从  https://worldcubeassociation.org/export/results 下载 SQL 数据，并导入到 **MySQL Workbench**。执行以下查询并将结果导出为 `wca_scrambles_info.csv`。
 
