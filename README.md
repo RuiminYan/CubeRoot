@@ -24,11 +24,6 @@
 
 使用 `only_2_row_no_wide_move_split.py` 脚本对 `wca_scrambles_info.csv` 进行分割。
 
--   每个分割文件包含 **10000 行**数据。
-    
--   文件名自动设定为 `part_xxx.csv`。
-    
-    
 
 ## 2\. 🌐 批量求解与结果合并
 
@@ -62,4 +57,4 @@
 
 ### B. 数据库导入
 
-2. 在 MySQL Workbench 中创建`cross_schema`, 执行 `cross_table.sql` 脚本。
+2. 在 MySQL Workbench 中创建`cross_schema`, 使用 `cross_table.sql` 脚本。
