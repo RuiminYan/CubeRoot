@@ -22,7 +22,7 @@
 
 ### B. 分割文件
 
-用 `only_2_row_no_wide_move_split.py` 对 `wca_scrambles_info.csv` 进行分割。
+用 `first_2_col_no_wide_move_split.py` 对 `wca_scrambles_info.csv` 进行分割。
 
 
 ## 2\. 🌐 批量求解与结果合并
