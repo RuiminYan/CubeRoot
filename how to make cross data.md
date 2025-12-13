@@ -5,7 +5,6 @@
 
 ```sql
 SELECT
--- 行号 ROW_NUMBER() OVER (ORDER BY scrambleId) AS row_num,
     scrambleId,
     scramble,
     competitionId,
