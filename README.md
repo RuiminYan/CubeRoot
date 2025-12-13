@@ -1,6 +1,6 @@
 # 💾 Batch Cross Solver 批量求解流程
 
-这是一个使用 **or18 Solver** 批量计算三阶魔方打乱的 **cross, xcross, xxcross, xxxcross** 最少步，并将数据导入数据库的完整流程。
+这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱的 **cross, xcross, xxcross, xxxcross** 最少步，并将数据导入数据库的完整流程。
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
