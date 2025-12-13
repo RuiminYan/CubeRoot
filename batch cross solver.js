@@ -15,13 +15,17 @@ function loadScramblesFromLocalFile() {
       const file = input.files[0];
       if (!file) return reject("未选择文件");
 
+      // 提取文件名作为前缀，去除扩展名 .txt
+      const fileName = file.name.replace(/\.txt$/, '');
+
       const reader = new FileReader();
       reader.onload = () => {
         const lines = reader.result.split(/\r?\n/)
           .map(l => l.trim())
           .filter(l => l);
 
-        console.log(`✅ 已加载 ${lines.length} 条记录（含编号 + 打乱）`);
+        // 🚀 修改点：更新 console.log 输出格式
+        console.log(`✅ 已加载文件 ${file.name}，共 ${lines.length} 条记录（含编号 + 打乱）`);
 
         // 解析成 { id, scramble }
         const parsed = lines.map(l => {
@@ -32,7 +36,7 @@ function loadScramblesFromLocalFile() {
           };
         });
 
-        resolve(parsed);
+        resolve({ scrambles: parsed, fileName: fileName }); 
       };
       reader.onerror = () => reject("读取文件失败");
       reader.readAsText(file);
@@ -165,7 +169,7 @@ async function stableReadTable({
 }
 
 // ==================== 5️⃣ 批量处理（仅输出编号 + 90列） ====================
-async function batchProcess(scrambles) {
+async function batchProcess(scrambles, baseName) { // 🚀 修改点 2：接收 baseName
     const input = document.querySelector("textarea");
     const analyzeBtn = [...document.querySelectorAll("button")]
       .find(b => b.innerText.toLowerCase().includes("analy"));
@@ -175,17 +179,17 @@ async function batchProcess(scrambles) {
         return;
     }
 
-    const baseName = prompt("请输入导出的文件名称（无需扩展名）:", "cross_stat");
+    // 🚀 修改点 3：移除 prompt 部分，直接使用传入的 baseName
     if (!baseName) {
-        console.error("❌ 未输入名称，已取消");
+        console.error("❌ 未传入文件名前缀，已取消");
         return;
     }
 
     let csvBuffer = "";
     let processed = 0;
     let filePart = 1;
-    // 🔔 增加警告计数器
-    let warningCount = 0;
+    // 🔔 增加警告计数器
+    let warningCount = 0;
 
     const globalStart = performance.now();
 
@@ -197,7 +201,7 @@ async function batchProcess(scrambles) {
         // 1. 同步操作：输入打乱步骤
         input.value = scramble;
         input.dispatchEvent(new Event("input", { bubbles: true }));
-        
+        
         // 2. 同步操作：点击分析按钮，触发计算
         analyzeBtn.click();
 
@@ -211,10 +215,10 @@ async function batchProcess(scrambles) {
         const costMs = t1 - t0; // 计算毫秒数
         const costSec = (costMs / 1000).toFixed(3);
 
-        // 🔔 检查是否为警告（小于 1499 毫秒）
-        if (costMs < 1499) {
-            warningCount++;
-        }
+        // 🔔 检查是否为警告（小于 1499 毫秒）
+        if (costMs < 1499) {
+            warningCount++;
+        }
 
         console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
@@ -232,16 +236,16 @@ async function batchProcess(scrambles) {
         }
         
         // 🟢 延迟 2 (100ms)：循环间歇休息
-        if (i < scrambles.length - 1) { 
+        if (i < scrambles.length - 1) { 
              await new Promise(r => setTimeout(r, 100)); 
         }
     }
 
     const globalEnd = performance.now();
     const totalSec = ((globalEnd - globalStart) / 1000).toFixed(3);
-    
-    // 🔔 在最终输出前，输出警告次数
-    console.warn(`⚠️ 警告：共有 ${warningCount} 次运算用时小于1.499s。`);
+    
+    // 🔔 在最终输出前，输出警告次数
+    console.warn(`⚠️ 警告：共有 ${warningCount} 次运算用时小于1.499s。`);
     console.log(`⏰ 总共用时: ${totalSec}s`);
 }
 
@@ -260,10 +264,13 @@ function downloadCSVBuffer(csvBuffer, filename) {
 
 // ==================== 7️⃣ 主入口 ====================
 async function main() {
-  const scrambles = await loadScramblesFromLocalFile();
+  const result = await loadScramblesFromLocalFile(); // 🚀 修改点 4：接收包含 scrambles 和 fileName 的结果对象
+  const scrambles = result.scrambles;
+  const fileName = result.fileName;
+
   if (!scrambles.length) return;
 
-  await batchProcess(scrambles);
+  await batchProcess(scrambles, fileName); // 🚀 修改点 5：传入文件名
 }
 
 // ==================== 8️⃣ 执行 ====================
