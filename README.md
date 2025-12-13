@@ -1,5 +1,5 @@
 # Batch Cross Solver
-这是在https://or18.github.io/RubiksSolverDemo/ 中批量输出三阶魔方cross,xcross,xxcross,xxxcross最少步的流程
+这是使用or18 Solver批量输出三阶魔方cross,xcross,xxcross,xxxcross最少步的流程
 
 📂 数据准备：从 https://worldcubeassociation.org/export/results 导出sql并导入到MySQL Workbench
 使用以下查询并导出为wca_scrambles_info.csv
@@ -20,7 +20,7 @@ WHERE
 
 用only_2_row_no_wide_move_split.py将wca_scrambles_info.csv分割成多个csv, 每个10000行, 文件名自动设定为part_xxx, 移动到input文件夹
 
-复制batch cross solver.js代码到Chrome控制台, 指定输出文件名前缀为xxx, 自动导出的csv有多个, 每个2000行, 文件名自动设定为xxx_part1~5, 移动到output文件夹
+复制batch cross solver.js代码到https://or18.github.io/RubiksSolverDemo/ 的Chrome控制台, 指定输出文件名前缀为xxx, 自动导出的csv有多个, 每个2000行, 文件名自动设定为xxx_part1~5, 移动到output文件夹
 
 用append.py行拼接它们得到cross.csv, 用CheckConsecutiveDuplicates_ExclFirstCol.py检查是否有相邻的重复行
 
