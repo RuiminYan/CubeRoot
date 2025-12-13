@@ -211,31 +211,22 @@ SELECT
     AVG(DUAL_XXXC) AS avg_DUAL_XXXC,
     AVG(CN_XXXC) AS avg_CN_XXXC
 FROM 
-    cross_data;
-
-
-
--- 带序号的查询
-SELECT
-    ROW_NUMBER() OVER (ORDER BY t.scramble) AS temp_row_num,
-    t.* -- 使用表别名 't' 来限定所有列
-FROM
-    cross_data AS t; -- 给 cross_data 表一个别名 't'
+    cross_table;
 
 
 -- 计算W_BL 列的分布
 SELECT
-    t1.W_BL AS step_count,                                          -- W_BL 列的数值 (步数)
+    t1.W_BL AS move_count,                                          -- W_BL 列的数值 (步数)
     t1.frequency,                                                   -- 该数值出现的次数 (频率)
     
     -- 1. 频率倒数
     CAST(
-        100 / NULLIF( (t1.frequency / (SELECT COUNT(*) FROM cross_data)) * 100, 0)
+        100 / NULLIF( (t1.frequency / (SELECT COUNT(*) FROM cross_table)) * 100, 0)
         AS UNSIGNED
     ) AS reciprocal_of_percentage, 
 
     -- 2. 频率 (保留两位小数)
-    ROUND((t1.frequency / (SELECT COUNT(*) FROM cross_data)) * 100, 2) AS percentage 
+    ROUND((t1.frequency / (SELECT COUNT(*) FROM cross_table)) * 100, 2) AS percentage 
     
 FROM
     (
@@ -244,12 +235,12 @@ FROM
             W_BL,
             COUNT(*) AS frequency
         FROM
-            cross_data
+            cross_table
         GROUP BY
             W_BL
     ) AS t1
 ORDER BY
-    step_count ASC;
+    move_count ASC;
 
 
 
@@ -257,7 +248,7 @@ ORDER BY
 SELECT
     scramble
 FROM
-    cross_data
+    cross_table
 WHERE
     CN_XXXC = 5;
 
