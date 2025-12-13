@@ -22,14 +22,14 @@
 
 ### B. 分割文件
 
-使用 `only_2_row_no_wide_move_split.py` 脚本对 `wca_scrambles_info.csv` 进行分割。
+用 `only_2_row_no_wide_move_split.py` 对 `wca_scrambles_info.csv` 进行分割。
 
 
 ## 2\. 🌐 批量求解与结果合并
 
 ### A. 批量求解
 
-1.  打开批量求解网站：[https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)
+1.  打开批量求解网站 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)
     
 2.  将 `batch cross solver.js` 代码复制并粘贴到 **Chrome 控制台 (Console)** 中执行，脚本会自动运行求解并自动导出为多个 CSV 文件，将它们移动到 `output` 文件夹。
 
@@ -37,13 +37,15 @@
 
 ### A. 列拼接与导入准备
 
-1.  编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行. 使用 `append_CheckConsecutiveDuplicates_ExclFirstCol_concat.py` 脚本将 `wca_scrambles_info.csv` 和 `cross.csv` **列拼接**（横向合并）得到 `wca_scrambles_info_cross.csv`。
+编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行.
+
+用 `append_CheckConsecutiveDuplicates_ExclFirstCol_concat.py` 将 `wca_scrambles_info.csv` 和 `cross.csv` **列拼接**（横向合并）得到 `wca_scrambles_info_cross.csv`。
     
     -   **注意：** 确保文件最后一行非空。
         
-2.  将 `wca_scrambles_info_cross.csv` 复制到 MySQL 的安全导入路径： `C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\`
+将 `wca_scrambles_info_cross.csv` 复制到 MySQL 的安全导入路径： `C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\`
     
 
 ### B. 数据库导入
 
-2. 在 MySQL Workbench 中创建`cross_schema`, 使用 `cross_table.sql` 脚本。
+在 MySQL Workbench 中创建`cross_schema`, 使用 `cross_table.sql` 脚本。
