@@ -62,7 +62,4 @@
 
 ### B. 数据库导入
 
-在 MySQL Workbench 中执行 `cross_table.sql` 脚本，将数据导入到数据库中。
-
-
-
+2. 在 MySQL Workbench 中创建`cross_schema`, 执行 `cross_table.sql` 脚本。
