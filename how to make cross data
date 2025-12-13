@@ -1,0 +1,14 @@
+在MySQL Workbench中使用以下查询并导出为导出wca_scrambles_info.csv
+
+SELECT
+-- 行号 ROW_NUMBER() OVER (ORDER BY scrambleId) AS row_num,
+    scrambleId,
+    scramble,
+    competitionId,
+    eventId,
+    isExtra
+FROM
+    wca_export.scrambles
+WHERE
+    eventId IN ('333', '333bf', '333oh', '333ft', '333fm')
+    AND scrambleId > 5259372
