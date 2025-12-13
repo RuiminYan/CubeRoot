@@ -1,4 +1,4 @@
-这是在https://or18.github.io/RubiksSolverDemo/ 中批量输出三阶魔方的cross,xcross,xxcross,xxxcross的最优步数的流程.
+这是在https://or18.github.io/RubiksSolverDemo/ 中批量输出三阶魔方cross,xcross,xxcross,xxxcross最少步的流程
 
 📂 数据准备：从 WCA 数据库导出打乱
 在MySQL Workbench中使用以下查询并导出为wca_scrambles_info.csv
