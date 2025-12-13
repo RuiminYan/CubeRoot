@@ -27,15 +27,11 @@
 
 ## 2\. 🌐 批量求解与结果合并
 
-### A. 批量求解
-
-1.  打开批量求解网站 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)
+打开批量求解网站 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)
     
-2.  将 `batch cross solver.js` 代码复制并粘贴到 **Chrome 控制台 (Console)** 中执行，脚本会自动运行求解并自动导出为多个 CSV 文件，将它们移动到 `output` 文件夹。
+将 `batch cross solver.js` 代码复制并粘贴到 **Chrome 控制台 (Console)** 中执行，脚本会自动运行求解并自动导出为多个 CSV 文件，将它们移动到 `output` 文件夹。
 
-## 2\. 📝 数据结构化与导入
-
-### A. 列拼接与导入准备
+## 3\. 📝 数据结构化与导入
 
 编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行.
 
@@ -43,9 +39,6 @@
     
     -   **注意：** 确保文件最后一行非空。
         
-将 `wca_scrambles_info_cross.csv` 复制到 MySQL 的安全导入路径： `C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\`
-    
+将 `wca_scrambles_info_cross.csv` 复制到 MySQL 的安全导入路径： `C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\` 
 
-### B. 数据库导入
-
-在 MySQL Workbench 中创建`cross_schema`, 使用 `cross_table.sql` 脚本。
+在 MySQL Workbench 中创建`cross_schema`, 用 `cross_table.sql` 。
