@@ -1,8 +1,3 @@
--- MySQL Workbench导入csv流程：
--- 0. 复制csv到C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\
--- 1. 创建schema
-
--- 2. 用以下语句
 DROP TABLE IF EXISTS cross_table;
 
 CREATE TABLE cross_table (
@@ -187,7 +182,7 @@ SET SQL_SAFE_UPDATES = 1;
 
 
 
--- 3. 统计
+-- 统计
 -- 计算新列平均值
 SELECT
     AVG(W_BL) AS avg_W_BL,
