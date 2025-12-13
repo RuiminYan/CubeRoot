@@ -52,7 +52,7 @@
 
 ### B. 合并与检查
 
-1.  使用 `append.py` 脚本，将 `output` 文件夹中的所有 `xxx_partN.csv` 文件**行拼接**（纵向合并）成 **`cross.csv`**。
+1.  使用 `append.py` 脚本，将 `output` 文件夹中的所有 `xxx_partN.csv` 文件**行拼接**（纵向合并）成`cross.csv`。
     
 2.  使用 `CheckConsecutiveDuplicates_ExclFirstCol.py` 检查 `cross.csv`，确保除了第一列外没有相邻的重复行。
     
@@ -67,7 +67,7 @@
 
 ### B. 列拼接与导入准备
 
-1.  编辑 **`wca_scrambles_info.csv`** , 仅保留其中需要的行. 使用 `concat.py` 脚本将 **`wca_scrambles_info.csv`** 和 **`cross.csv`** **列拼接**（横向合并）得到 **`wca_scrambles_info_cross.csv`**。
+1.  编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行. 使用 `concat.py` 脚本将 `wca_scrambles_info.csv` 和 `cross.csv` **列拼接**（横向合并）得到 `wca_scrambles_info_cross.csv`。
     
     -   **注意：** 确保文件最后一行非空。
         
