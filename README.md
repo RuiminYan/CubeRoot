@@ -67,7 +67,7 @@
 
 ### B. 列拼接与导入准备
 
-1.  使用 `concat.py` 脚本将 **`wca_scrambles_info.csv`** 和 **`cross.csv`** **列拼接**（横向合并）得到 **`wca_scrambles_info_cross.csv`**。
+1.  编辑**`wca_scrambles_info.csv`**, 仅保留其中需要的行. 使用 `concat.py` 脚本将 **`wca_scrambles_info.csv`** 和 **`cross.csv`** **列拼接**（横向合并）得到 **`wca_scrambles_info_cross.csv`**。
     
     -   **注意：** 确保文件最后一行非空。
         
