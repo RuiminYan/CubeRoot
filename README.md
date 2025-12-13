@@ -5,10 +5,7 @@
 准备 `txt` 文件, 里面有编号列和打乱列. 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_solver.js` 中的代码, 弹窗时选择 `txt` 文件, 每计算2000行会得到一个`csv`.
 
 
-
-# 💾 Batch Cross Solver 批量求解WCA官方所有三阶打乱
-
-这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算WCA官方所有三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步, 并将数据导入数据库的完整流程.
+# 💾 Batch Cross Solver 批量求解WCA官方所有三阶打乱并导入数据库
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
