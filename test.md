@@ -1,14 +1,12 @@
 # 💾 Batch Cross Solver 批量求解流程
 
-这是一个使用 **or18 Solver** 批量计算 WCA 三阶魔方打乱（Scrambles）的 **Cross**、**X-Cross**、**XX-Cross**、**XXX-Cross** 最少步状态，并将数据导入数据库的完整流程。
+这是一个使用 **or18 Solver** 批量计算三阶魔方打乱的 **cross**、**xcross**、**xxcross**、**xxxcross** 最少步状态，并将数据导入数据库的完整流程。
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
 ### A. 导出数据
 
-从 WCA 官方数据源导出 SQL 数据，并导入到 **MySQL Workbench**。执行以下查询并将结果导出为 **`wca_scrambles_info.csv`**。
-
-SQL
+从  https://worldcubeassociation.org/export/results 导出 SQL 数据，并导入到 **MySQL Workbench**。执行以下查询并将结果导出为 **`wca_scrambles_info.csv`**。
 
     SELECT
         scrambleId,
@@ -65,7 +63,7 @@ SQL
 
 手动编辑 `cross.csv` 文件，在第一行插入完整的表头，以确保列名正确对应。
 
-scrambleId,Y_C,Y_BL,Y_BR,Y_FR,Y_FL,Y_BL_BR,Y_BL_FR,Y_BL_FL,Y_BR_FR,Y_BR_FL,Y_FR_FL,Y_BL_BR_FR,Y_BL_BR_FL,Y_BL_FR_FL,Y_BR_FR_FL,W_C,W_BL,W_BR,W_FR,W_FL,W_BL_BR,W_BL_FR,W_BL_FL,W_BR_FR,W_BR_FL,W_FR_FL,W_BL_BR_FR,W_BL_BR_FL,W_BL_FR_FL,W_BR_FR_FL,O_C,O_BL,O_BR,O_FR,O_FL,O_BL_BR,O_BL_FR,O_BL_FL,O_BR_FR,O_BR_FL,O_FR_FL,O_BL_BR_FR,O_BL_BR_FL,O_BL_FR_FL,O_BR_FR_FL,R_C,R_BL,R_BR,R_FR,R_FL,R_BL_BR,R_BL_FR,R_BL_FL,R_BR_FR,R_BR_FL,R_FR_FL,R_BL_BR_FR,R_BL_BR_FL,R_BL_FR_FL,R_BR_FR_FL,G_C,G_BL,G_BR,G_FR,G_FL,G_BL_BR,G_BL_FR,G_BL_FL,G_BR_FR,G_BR_FL,G_FR_FL,G_BL_BR_FR,G_BL_BR_FL,G_BL_FR_FL,G_BR_FR_FL,B_C,B_BL,B_BR,B_FR,B_FL,B_BL_BR,B_BL_FR,B_BL_FL,B_BR_FR,B_BR_FL,B_FR_FL,B_BL_BR_FR,B_BL_BR_FL,B_BL_FR_FL,B_BR_FR_FL
+    scrambleId,Y_C,Y_BL,Y_BR,Y_FR,Y_FL,Y_BL_BR,Y_BL_FR,Y_BL_FL,Y_BR_FR,Y_BR_FL,Y_FR_FL,Y_BL_BR_FR,Y_BL_BR_FL,Y_BL_FR_FL,Y_BR_FR_FL,W_C,W_BL,W_BR,W_FR,W_FL,W_BL_BR,W_BL_FR,W_BL_FL,W_BR_FR,W_BR_FL,W_FR_FL,W_BL_BR_FR,W_BL_BR_FL,W_BL_FR_FL,W_BR_FR_FL,O_C,O_BL,O_BR,O_FR,O_FL,O_BL_BR,O_BL_FR,O_BL_FL,O_BR_FR,O_BR_FL,O_FR_FL,O_BL_BR_FR,O_BL_BR_FL,O_BL_FR_FL,O_BR_FR_FL,R_C,R_BL,R_BR,R_FR,R_FL,R_BL_BR,R_BL_FR,R_BL_FL,R_BR_FR,R_BR_FL,R_FR_FL,R_BL_BR_FR,R_BL_BR_FL,R_BL_FR_FL,R_BR_FR_FL,G_C,G_BL,G_BR,G_FR,G_FL,G_BL_BR,G_BL_FR,G_BL_FL,G_BR_FR,G_BR_FL,G_FR_FL,G_BL_BR_FR,G_BL_BR_FL,G_BL_FR_FL,G_BR_FR_FL,B_C,B_BL,B_BR,B_FR,B_FL,B_BL_BR,B_BL_FR,B_BL_FL,B_BR_FR,B_BR_FL,B_FR_FL,B_BL_BR_FR,B_BL_BR_FL,B_BL_FR_FL,B_BR_FR_FL
 
 ### B. 列拼接与导入准备
 
