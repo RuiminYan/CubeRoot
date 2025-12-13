@@ -50,31 +50,18 @@
 5.  将所有导出的 CSV 文件移动到 **`output`** 文件夹。
     
 
-### B. 合并与检查
+## 2\. 📝 数据结构化与导入
 
-1.  使用 `append.py` 脚本，将 `output` 文件夹中的所有 `xxx_partN.csv` 文件**行拼接**（纵向合并）成`cross.csv`。
-    
-2.  使用 `CheckConsecutiveDuplicates_ExclFirstCol.py` 检查 `cross.csv`，确保除了第一列外没有相邻的重复行。
-    
+### A. 列拼接与导入准备
 
-## 3\. 📝 数据结构化与导入
-
-### A. 插入表头
-
-手动编辑 `cross.csv` 文件，在第一行插入完整的表头，以确保列名正确对应。
-
-    scrambleId,Y_C,Y_BL,Y_BR,Y_FR,Y_FL,Y_BL_BR,Y_BL_FR,Y_BL_FL,Y_BR_FR,Y_BR_FL,Y_FR_FL,Y_BL_BR_FR,Y_BL_BR_FL,Y_BL_FR_FL,Y_BR_FR_FL,W_C,W_BL,W_BR,W_FR,W_FL,W_BL_BR,W_BL_FR,W_BL_FL,W_BR_FR,W_BR_FL,W_FR_FL,W_BL_BR_FR,W_BL_BR_FL,W_BL_FR_FL,W_BR_FR_FL,O_C,O_BL,O_BR,O_FR,O_FL,O_BL_BR,O_BL_FR,O_BL_FL,O_BR_FR,O_BR_FL,O_FR_FL,O_BL_BR_FR,O_BL_BR_FL,O_BL_FR_FL,O_BR_FR_FL,R_C,R_BL,R_BR,R_FR,R_FL,R_BL_BR,R_BL_FR,R_BL_FL,R_BR_FR,R_BR_FL,R_FR_FL,R_BL_BR_FR,R_BL_BR_FL,R_BL_FR_FL,R_BR_FR_FL,G_C,G_BL,G_BR,G_FR,G_FL,G_BL_BR,G_BL_FR,G_BL_FL,G_BR_FR,G_BR_FL,G_FR_FL,G_BL_BR_FR,G_BL_BR_FL,G_BL_FR_FL,G_BR_FR_FL,B_C,B_BL,B_BR,B_FR,B_FL,B_BL_BR,B_BL_FR,B_BL_FL,B_BR_FR,B_BR_FL,B_FR_FL,B_BL_BR_FR,B_BL_BR_FL,B_BL_FR_FL,B_BR_FR_FL
-
-### B. 列拼接与导入准备
-
-1.  编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行. 使用 `concat.py` 脚本将 `wca_scrambles_info.csv` 和 `cross.csv` **列拼接**（横向合并）得到 `wca_scrambles_info_cross.csv`。
+1.  编辑 `wca_scrambles_info.csv` , 仅保留其中需要的行. 使用 `append_CheckConsecutiveDuplicates_ExclFirstCol_concat.py` 脚本将 `wca_scrambles_info.csv` 和 `cross.csv` **列拼接**（横向合并）得到 `wca_scrambles_info_cross.csv`。
     
     -   **注意：** 确保文件最后一行非空。
         
 2.  将 `wca_scrambles_info_cross.csv` 复制到 MySQL 的安全导入路径： `C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\`
     
 
-### C. 数据库导入
+### B. 数据库导入
 
 在 MySQL Workbench 中执行 `cross_table.sql` 脚本，将数据导入到数据库中。
 
