@@ -6,7 +6,7 @@
 
 ### A. 下载并导出数据
 
-从  https://worldcubeassociation.org/export/results 下载 `sql.zip` , 导入到 **MySQL Workbench**. 
+从 https://worldcubeassociation.org/export/results 下载 `sql.zip` , 导入到 **MySQL Workbench**. 
 
 执行以下查询代码, 将结果导出为 `wca_scrambles_info.csv` ,  放到 `output` 文件夹.
 
