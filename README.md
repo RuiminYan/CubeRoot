@@ -29,7 +29,7 @@
 
 ## 2\. 🌐 批量求解与结果合并
 
-在Chrome中打开[https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/)的控制台, 执行 `batch cross solver.js` 中的代码, 弹窗时选择 `part_001.txt` 等, 得到多个 `part_001_part_001.csv` ,  放到 `output` 文件夹.
+在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) 的控制台, 执行 `batch cross solver.js` 中的代码, 弹窗时选择 `part_001.txt` 等, 得到多个 `part_001_part_001.csv` ,  放到 `output` 文件夹.
 
 ## 3\. 📝 数据结构化与导入
 
