@@ -2,7 +2,7 @@
 
 这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步.
 
-准备 `txt` 文件, 里面有编号列和打乱列. 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch cross solver.js` 中的代码, 弹窗时选择 `txt` 文件, 每计算2000行会得到一个`csv`.
+准备 `txt` 文件, 里面有编号列和打乱列. 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_solver.js` 中的代码, 弹窗时选择 `txt` 文件, 每计算2000行会得到一个`csv`.
 
 
 
@@ -36,7 +36,7 @@
 
 ## 2\. 🌐 批量求解与结果合并
 
-在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch cross solver.js` 中的代码, 弹窗时选择 `part_001.txt` 等, 得到多个 `part_001_part_001.csv` ,  放到 `output` 文件夹.
+在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_solver.js` 中的代码, 弹窗时选择 `part_001.txt` 等, 得到多个 `part_001_part_001.csv` ,  放到 `output` 文件夹.
 
 ## 3\. 📝 数据结构化与导入
 
