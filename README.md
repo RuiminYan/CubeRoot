@@ -1,6 +1,14 @@
-# 💾 Batch Cross Solver 批量求解流程
+# 💾 Batch Cross Solver 批量求解
 
-这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱的 **cross,  xcross,  xxcross,  xxxcross** 最少步, 并将数据导入数据库的完整流程.
+这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步.
+
+准备 `txt` 文件, 里面有编号列和打乱列. 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch cross solver.js` 中的代码, 弹窗时选择 `txt` 文件, 每计算2000行会得到一个`csv`.
+
+
+
+# 💾 Batch Cross Solver 批量求解WCA官方所有三阶打乱
+
+这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算WCA官方所有三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步, 并将数据导入数据库的完整流程.
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
@@ -25,7 +33,6 @@
 ### B. 分割文件
 
 用 `first_2_col_no_wide_move_split.py` 对 `wca_scrambles_info.csv` 进行处理和分割, 得到多个 `part_001.txt` .
-
 
 ## 2\. 🌐 批量求解与结果合并
 
