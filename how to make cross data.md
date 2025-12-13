@@ -3,6 +3,7 @@
 📂 数据准备：从 WCA 数据库导出打乱
 在MySQL Workbench中使用以下查询并导出为wca_scrambles_info.csv
 
+```sql
 SELECT
 -- 行号 ROW_NUMBER() OVER (ORDER BY scrambleId) AS row_num,
     scrambleId,
@@ -15,6 +16,7 @@ FROM
 WHERE
     eventId IN ('333', '333bf', '333oh', '333ft', '333fm')
     AND scrambleId > 5259372 -- 更改这里
+```
 
 用only_2_row_no_wide_move_split.py将wca_scrambles_info.csv分割成多个csv, 每个10000行, 文件名自动设定为part_xxx, 移动到input文件夹
 
