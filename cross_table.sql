@@ -3,10 +3,14 @@
 -- 1. 创建schema
 
 -- 2. 用以下语句
-DROP TABLE IF EXISTS cross_data;
+DROP TABLE IF EXISTS cross_table;
 
-CREATE TABLE cross_data (
-    scramble VARCHAR(255) PRIMARY KEY,
+CREATE TABLE cross_table (
+	scrambleId INT UNSIGNED PRIMARY KEY,
+    scramble TEXT,
+    competitionId VARCHAR(32),
+    eventId VARCHAR(6),
+    isExtra TINYINT(1),
     Y_C INT,
     Y_BL INT,
     Y_BR INT,
@@ -99,14 +103,14 @@ CREATE TABLE cross_data (
     B_BR_FR_FL INT
 );
 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/cross.csv'
-INTO TABLE cross_data
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/wca_scrambles_info_cross.csv'
+INTO TABLE cross_table
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS;
 
 -- 添加列
-ALTER TABLE cross_data
+ALTER TABLE cross_table
 ADD COLUMN Y_XC INT,
 ADD COLUMN W_XC INT,
 ADD COLUMN O_XC INT,
@@ -138,7 +142,7 @@ ADD COLUMN CN_XXXC INT;
 
 -- 计算列
 SET SQL_SAFE_UPDATES = 0;
-UPDATE cross_data
+UPDATE cross_table
 SET
 	Y_XC = LEAST(Y_BL, Y_BR, Y_FR, Y_FL),
     W_XC = LEAST(W_BL, W_BR, W_FR, W_FL),
@@ -172,6 +176,9 @@ SET
     CN_XXXC = LEAST(Y_XXXC, W_XXXC, O_XXXC, R_XXXC, G_XXXC, B_XXXC);
 
 SET SQL_SAFE_UPDATES = 1;
+
+
+
 
 
 
