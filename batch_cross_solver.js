@@ -122,7 +122,7 @@ async function waitForTableComplete({
     : [];
 
   const rows = table
-    ? Array.from(table.querySelectorAll("tbody tr, tr")).slice(1, 16)
+    ? Array.from(table.querySelectorAll("tbody tr, tr")).slice(1, 15+1)
     : [];
 
   return { table, headerCells, colIndices, rows };
