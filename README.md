@@ -42,6 +42,6 @@
 
 编辑 `wca_scrambles_info.csv` ,  仅保留其中需要的行.
 
-将 `append_CheckConsecutiveDuplicates_ExclFirstCol_concat.py` 放到 `output` 文件夹, 运行得到 `wca_scrambles_info_cross.csv` .
+将 `wca_scramble_cross_processor.py` 放到 `output` 文件夹, 运行得到 `wca_scrambles_info_cross.csv` .
 
 在 MySQL Workbench 中创建`cross_schema`,  用 `cross_table.sql` .
