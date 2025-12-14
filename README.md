@@ -30,9 +30,9 @@
         eventId IN ('333', '333bf', '333oh', '333ft', '333fm', '333mbf')
         AND scrambleId > 5259372 -- **请根据需求更新起始ID**
 
-### B. 分割文件
+### B. 预处理
 
-用 `first_2_col_no_wide_move_split.py` 对 `wca_scrambles_info.csv` 进行处理和分割, 得到多个 `part_001.txt` .
+用 `wca_scramble_processor.py` 对 `wca_scrambles_info.csv` 预处理, 得到多个 `part_001.txt` .
 
 ## 2\. 🌐 批量求解与结果合并
 
