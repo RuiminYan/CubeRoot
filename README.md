@@ -20,11 +20,14 @@
         scramble, 
         competitionId, 
         eventId, 
-        isExtra
+        roundTypeId,
+        groupId,
+        isExtra,
+        scrambleNum
     FROM
         wca_export.scrambles
     WHERE
-        eventId IN ('333',  '333bf',  '333oh',  '333ft',  '333fm')
+        eventId IN ('333', '333bf', '333oh', '333ft', '333fm', '333mbf')
         AND scrambleId > 5259372 -- **请根据需求更新起始ID**
 
 ### B. 分割文件
