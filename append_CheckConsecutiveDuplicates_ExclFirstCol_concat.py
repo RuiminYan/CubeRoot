@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 import os
 import sys
+import shutil # 引入 shutil 模块用于文件复制
 
 # --- 配置参数 ---
 # 1. append.py 的输出文件名 (上下合并结果)
@@ -25,6 +26,9 @@ CROSS_CSV_HEADERS = [
     'G_C', 'G_BL', 'G_BR', 'G_FR', 'G_FL', 'G_BL_BR', 'G_BL_FR', 'G_BL_FL', 'G_BR_FR', 'G_BR_FL', 'G_FR_FL', 'G_BL_BR_FR', 'G_BL_BR_FL', 'G_BL_FR_FL', 'G_BR_FR_FL', 
     'B_C', 'B_BL', 'B_BR', 'B_FR', 'B_FL', 'B_BL_BR', 'B_BL_FR', 'B_BL_FL', 'B_BR_FR', 'B_BR_FL', 'B_FR_FL', 'B_BL_BR_FR', 'B_BL_BR_FL', 'B_BL_FR_FL', 'B_BR_FR_FL'
 ]
+
+# 6. 🆕 MySQL 安全导入路径
+MYSQL_UPLOAD_PATH = r'C:\ProgramData\MySQL\MySQL Server 8.0\Uploads' # 使用原始字符串 r'' 避免转义问题
 
 # --- 核心函数 1: 上下合并所有 CSV (原 append.py 的核心逻辑) ---
 def step_1_append_all_csvs(output_filename: str, headers: list):
@@ -192,6 +196,37 @@ def clean_up_intermediate_file(file_path: str):
             print(f"\n❌ 删除文件 {file_path} 时发生错误: {e}")
     else:
         print(f"\nℹ️ 中间文件 {file_path} 不存在，无需删除。")
+        
+# --- 核心函数 5: 🆕 复制最终文件到 MySQL 导入路径 ---
+def copy_final_file_to_mysql_upload(source_path: str, target_dir: str):
+    """
+    将生成的最终文件复制到 MySQL 的安全导入路径。
+    """
+    print("\n"+"-"*50)
+    print("📤 步骤 3/3: 复制最终文件到 MySQL 导入路径")
+    print("-" * 50)
+    
+    if not os.path.exists(source_path):
+        print(f"❌ 错误: 源文件 **{source_path}** 不存在，无法复制。")
+        return
+
+    # 确保目标目录存在
+    if not os.path.exists(target_dir):
+        print(f"❌ 错误: 目标路径 **{target_dir}** 不存在。请手动创建或检查路径。")
+        return
+
+    try:
+        # 使用 shutil.copy2 复制文件，保留元数据
+        shutil.copy2(source_path, target_dir)
+        print(f"✅ 成功复制文件 **{source_path}** 到:")
+        print(f"**{target_dir}**")
+        print("现在可以在 MySQL 中使用 LOAD DATA INFILE 命令导入数据了。")
+        
+    except PermissionError:
+        print(f"❌ 权限错误: 无法复制到 **{target_dir}**。")
+        print("请尝试以 **管理员身份** 运行此脚本，或检查目标文件夹的写入权限。")
+    except Exception as e:
+        print(f"❌ 复制文件时发生未知错误: {e}")
 
 
 # ====================================================================
@@ -215,8 +250,11 @@ if __name__ == "__main__":
             column_to_drop=COLUMN_TO_DROP_IN_CROSS,
             output_filename=FINAL_OUTPUT_FILENAME
         )
+        
+        # 4. 🆕 复制最终文件到 MySQL 导入路径
+        copy_final_file_to_mysql_upload(FINAL_OUTPUT_FILENAME, MYSQL_UPLOAD_PATH)
 
-        # 4. 🆕 删除中间文件 cross.csv
+        # 5. 🆕 删除中间文件 cross.csv
         clean_up_intermediate_file(APPEND_OUTPUT_FILENAME)
 
     else:
