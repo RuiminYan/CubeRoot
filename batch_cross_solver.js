@@ -1,6 +1,6 @@
 // https://or18.github.io/RubiksSolverDemo/
 // Show Analyzer, 全选Face Option
-// 从None列到x列共6列，15行，输出里面的所有内容，按列取内容,共90个值
+// 从None列到x列共6列，15行，输出里面的所有内容，按列取内容
 // .txt应有2列，第一列为编号列，第二列为打乱列
 // Chrome按F12进入控制台输入以下内容
 // 每个导出的csv包含2000行记录
