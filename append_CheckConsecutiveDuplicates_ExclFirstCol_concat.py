@@ -179,6 +179,20 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
     print(f"✅ 使用 concat 方法合并完成！")
     print(f"新文件 **{output_filename}** 已生成 ({len(merged_df)} 行, {len(merged_df.columns)} 列)。")
 
+# --- 核心函数 4: 删除中间文件 ---
+def clean_up_intermediate_file(file_path: str):
+    """
+    删除指定的中间文件。
+    """
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            print(f"\n🗑️ 成功删除中间文件: **{file_path}**")
+        except Exception as e:
+            print(f"\n❌ 删除文件 {file_path} 时发生错误: {e}")
+    else:
+        print(f"\nℹ️ 中间文件 {file_path} 不存在，无需删除。")
+
 
 # ====================================================================
 # 主执行块
@@ -201,5 +215,12 @@ if __name__ == "__main__":
             column_to_drop=COLUMN_TO_DROP_IN_CROSS,
             output_filename=FINAL_OUTPUT_FILENAME
         )
+
+        # 4. 🆕 删除中间文件 cross.csv
+        clean_up_intermediate_file(APPEND_OUTPUT_FILENAME)
+
     else:
         print("\n流程终止：步骤 1 未能成功生成合并文件。")
+        
+        # 🆕 如果步骤 1 失败，但文件可能存在 (例如，之前运行遗留)，仍尝试清理
+        clean_up_intermediate_file(APPEND_OUTPUT_FILENAME)
