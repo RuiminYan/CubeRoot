@@ -1,6 +1,7 @@
 // https://or18.github.io/RubiksSolverDemo/
 // Show Analyzer, 全选Face Option
 // 从None列到x列共6列，15行，输出里面的所有内容，按列取内容
+// 可将数字15替换成表格实际有的行数
 // .txt应有2列，第一列为编号列，第二列为打乱列
 // Chrome按F12进入控制台输入以下内容
 // 每个导出的csv包含2000行记录
@@ -128,7 +129,7 @@ async function waitForTableComplete({
   return { table, headerCells, colIndices, rows };
 }
 
-// ==================== 3️⃣ 按“列优先”读取 90 个数 ====================
+// ==================== 3️⃣ 按“列优先”读取 15*6 个数 ====================
 function readNumbersByColumns({ rows, colIndices }) {
   const result = [];
 
@@ -143,7 +144,7 @@ function readNumbersByColumns({ rows, colIndices }) {
   return result;
 }
 
-// ==================== 4️⃣ 永久等待直到完整读到 90 个数 ====================
+// ==================== 4️⃣ 永久等待直到完整读到 15*6 个数 ====================
 async function stableReadTable({
   expectedRows = 15,
   columns = ["None","z2","z'","z","x'","x"],
@@ -169,14 +170,20 @@ async function stableReadTable({
   }
 }
 
-// ==================== 5️⃣ 批量处理（仅输出编号 + 90列） ====================
+// 6. Function to check if a button is inside a hidden details element (从代码1移动到全局作用域)
+function isInsideHiddenDetails(button) {
+    let parent = button.closest('details');
+    return parent && parent.classList.contains('hidden'); // Check if it has the hidden class
+}
+
+// ==================== 5️⃣ 批量处理（仅输出编号 + 15*6列） ====================
 async function batchProcess(scrambles, baseName) { // 🚀 修改点 2：接收 baseName
     const input = document.querySelector("textarea");
-    const analyzeBtn = [...document.querySelectorAll("button")]
-      .find(b => b.innerText.toLowerCase().includes("analy"));
+    // const analyzeBtn = [...document.querySelectorAll("button")]
+    //   .find(b => b.innerText.toLowerCase().includes("analy"));
 
-    if (!input || !analyzeBtn) {
-        console.error("❌ 找不到 Scramble 输入框 或 Analyze 按钮");
+    if (!input) {
+        console.error("❌ 找不到 Scramble 输入框");
         return;
     }
 
@@ -203,8 +210,38 @@ async function batchProcess(scrambles, baseName) { // 🚀 修改点 2：接收 
         input.value = scramble;
         input.dispatchEvent(new Event("input", { bubbles: true }));
         
-        // 2. 同步操作：点击分析按钮，触发计算
-        analyzeBtn.click();
+        // 2. 同步操作：点击分析按钮，触发计算 (替换为代码1中的逻辑)
+        // 1. Locate all details elements with "analyze" in their id and open them
+        const detailsElements = document.querySelectorAll("details[id*='analyze']"); // Filter details with "analyze" in the id
+        detailsElements.forEach(details => {
+            if (!details.open) {
+                details.open = true; // Open the <details> element
+                // console.log("Opened details element with ID:", details.id); // 批量模式下静默输出
+            }
+        });
+
+        // 2. Locate all buttons
+        const analyzeBtns = [...document.querySelectorAll("button")]
+            .filter(b => 
+                b.innerText.toLowerCase().includes("analy") && 
+                !b.classList.contains("hidden") && 
+                !isInsideHiddenDetails(b) // Check if it is inside a hidden details element
+            );
+        
+        // 3. Click each detected button
+        analyzeBtns.forEach(btn => {
+            btn.click(); // Click the button
+            // console.log(`✅ Analyze button clicked: ${btn.id}`); // 批量模式下静默输出
+        });
+        
+        if (analyzeBtns.length === 0) {
+            console.warn(`⚠️ 打乱 ${id} 警告：未找到可见的 Analyze 按钮，跳过.`);
+            // 🟢 延迟 2 (100ms)：循环间歇休息
+            if (i < scrambles.length - 1) { 
+             await new Promise(r => setTimeout(r, 100)); 
+            }
+            continue;
+        }
 
         // 🟢 延迟 1 (50ms): 防御性延迟
         await new Promise(r => setTimeout(r, 50)); 
@@ -223,7 +260,7 @@ async function batchProcess(scrambles, baseName) { // 🚀 修改点 2：接收 
 
         console.log(`${i + 1} / ${scrambles.length} 用时 ${costSec}s`);
 
-        // ⚠️ 最终要求：只输出「编号 + 90列」
+        // ⚠️ 最终要求：只输出「编号 + 15*6列」
         csvBuffer += `${id},${values.join(",")}\n`;
 
         processed++;
