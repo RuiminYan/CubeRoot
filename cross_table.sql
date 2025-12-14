@@ -1,11 +1,14 @@
 DROP TABLE IF EXISTS cross_table;
 
 CREATE TABLE cross_table (
-	scrambleId INT UNSIGNED PRIMARY KEY,
+	scrambleId VARCHAR(32) PRIMARY KEY,
     scramble TEXT,
     competitionId VARCHAR(32),
     eventId VARCHAR(6),
+	roundTypeId VARCHAR(1),
+    groupId VARCHAR(3),
     isExtra TINYINT(1),
+	scrambleNum INT,
     Y_C INT,
     Y_BL INT,
     Y_BR INT,
