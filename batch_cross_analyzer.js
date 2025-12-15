@@ -1,11 +1,12 @@
 // https://or18.github.io/RubiksSolverDemo/
-// Show Analyzer, 全选Face Option
-// Solve Option选择cross, x, xx, xxx
-// 该脚本从None列到x列共6列，15行，按列输出里面的所有数值
-// 可将数字15替换成表格实际有的行数
+// Solver: F2L Lite
+// 点击Show Analyzer, 全选Face Option
+// Solve Option: cross, x, xx, xxx
+// 该脚本会从None列到x列共6列，15行，按列输出里面的所有数值
+// 该脚本可应用于其他Solve, 例如Pair等, 此时将行数15替换成对应的Analyzer表格实际有的行数
 // .txt应有2列，第一列为编号列，第二列为打乱列
 // Chrome按F12进入控制台输入以下内容
-// 每个导出的csv包含2000行记录
+// 每个输出的csv包含2000行记录, 最后一个输出的csv可能不到2000行
 
 // ==================== 1️⃣ 选择 scrambles.txt 并读取 ====================
 function loadScramblesFromLocalFile() {
