@@ -7,7 +7,7 @@ CREATE TABLE cross_table (
     eventId VARCHAR(6),
 	roundTypeId VARCHAR(1),
     groupId VARCHAR(3),
-    isExtra TINYINT(1),
+    isExtra TINYINT,
 	scrambleNum INT,
     Y_C INT,
     Y_BL INT,
