@@ -2,7 +2,7 @@
 
 这是一个使用 [or18 analyzer](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步.
 
-准备仅含编号列和打乱列的`txt` . 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_analyzer.js` 中的代码, 弹窗时选择 `txt` 文件, 每计算2000行会得到一个`csv`.
+在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_analyzer.js` 中的代码, 弹窗时选择仅含编号列和打乱列的`txt` , 每计算2000行会得到一个`csv`.
 
 
 # 💾 Batch Cross Analyzer 批量求解WCA官方所有三阶打乱并导入数据库
