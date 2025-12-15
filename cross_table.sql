@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS cross_table;
 
 CREATE TABLE cross_table (
-	scrambleId INT PRIMARY KEY,
+	scrambleId BIGINT UNSIGNED PRIMARY KEY,
     scramble TEXT,
     competitionId VARCHAR(32),
     eventId VARCHAR(6),
