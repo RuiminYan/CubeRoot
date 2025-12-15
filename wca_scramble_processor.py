@@ -70,16 +70,21 @@ def step1_process_mbf_scrambles(input_file_path, output_file_path):
             other_df = df[df['eventId'] != '333mbf'].copy()
             
             mbf_count = len(mbf_df)
-            print(f"   共加载 {total_rows} 条记录，其中 {mbf_count} 条为 '333mbf' 多盲记录。")
+            print(f"    共加载 {total_rows} 条记录，其中 {mbf_count} 条为 '333mbf' 多盲记录。")
             
             if mbf_count == 0:
-                print("   警告：未发现 '333mbf' 记录，将直接复制文件。")
+                print("    警告：未发现 '333mbf' 记录，将直接复制文件。")
                 df.to_csv(output_file_path, index=False, encoding='utf-8')
                 return True
 
             # --- 处理非多盲数据 ---
             # 非多盲数据的子序号设为 0
             other_df['sub_index'] = 0
+            
+            # --- 核心修改 (非多盲)：构造统一数值型 ID ---
+            # 规则：原 ID + "001"
+            other_df['scrambleId'] = other_df['scrambleId'].astype(str) + '001'
+
 
             # --- 处理多盲数据 ---
             # a. 拆分字符串
@@ -99,8 +104,26 @@ def step1_process_mbf_scrambles(input_file_path, output_file_path):
             # e. 清理数据
             df_expanded['scramble'] = df_expanded['scramble'].str.strip()
             
-            # f. 构造新 ID
-            df_expanded['scrambleId'] = df_expanded['scrambleId'].astype(str) + '_' + df_expanded['sub_index'].astype(str).str.zfill(3)
+            # f. 构造新 ID (核心修改)
+            # 规则：原 ID + sub_index (3位零填充)，并移除原 ID中的下划线
+            # 示例：'607735_002' + '002' -> '607735_002' (原始ID，需要先处理它)
+            
+            # 1. 组合：原 ID (不带后缀) + 子序号 (00X)
+            #    原 ID（带下划线）是 WCA 原始 ID，例如 '607735_002'
+            #    这里需要先确保原始 ID 是 WCA ID，再进行操作
+            
+            # 提取原 ID中下划线之前的部分（即 WCA ID）
+            # 注意：在 explode 之后，df_expanded['scrambleId'] 仍然是原始 WCA ID (e.g., '607735_002')
+            
+            # 移除下划线部分（因为 sub_index 已经作为后缀 added）
+            # 示例: '607735_002' -> '607735'
+            # 这一步是为了防止 ID 中出现多个下划线，我们只需要用 sub_index 替换原来的子 ID
+            
+            # 提取数字部分（下划线前）
+            df_expanded['base_id'] = df_expanded['scrambleId'].apply(lambda x: x.split('_')[0])
+            
+            # 构造新的纯数字 ID：base_id + sub_index (3位零填充)
+            df_expanded['scrambleId'] = df_expanded['base_id'].astype(str) + df_expanded['sub_index'].astype(str).str.zfill(3)
 
             # --- 合并与排序 (关键修复) ---
             df_final = pd.concat([other_df, df_expanded], ignore_index=True)
@@ -114,7 +137,8 @@ def step1_process_mbf_scrambles(input_file_path, output_file_path):
             df_final = df_final.reset_index(drop=True)
 
             # --- 清理辅助列 ---
-            df_final = df_final.drop(columns=['original_index', 'sub_index'], errors='ignore')
+            # 需要保留新的 scrambleId，移除旧的辅助列
+            df_final = df_final.drop(columns=['original_index', 'sub_index', 'base_id'], errors='ignore')
             
             df_final.to_csv(output_file_path, index=False, encoding='utf-8')
             
@@ -139,7 +163,8 @@ def step2_extract_and_format(input_csv_path, output_txt_path):
         return False
     try:
         with step_timer("步骤 2"):
-            df = pd.read_csv(input_csv_path, header=0, dtype={'scrambleId': str})
+            # 注意：scrambleId 在步骤 1 中已经转换成纯数字字符串
+            df = pd.read_csv(input_csv_path, header=0, dtype={'scrambleId': str}) 
             df.iloc[:, :2].to_csv(output_txt_path, sep=',', header=False, index=False, encoding='utf-8')
             print(f"✅ 步骤 2 完成：已保存到 '{os.path.basename(output_txt_path)}'。")
         return True
