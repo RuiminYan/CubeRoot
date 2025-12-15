@@ -1,11 +1,11 @@
-# 💾 Batch Cross Analyzer 十字批量分析
+# 💾 Batch Cross Analyzer 批量分析十字
 
 这是一个使用 [or18 analyzer](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步.
 
 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_analyzer.js` 中的代码, 弹窗时选择仅含编号列和打乱列的`txt` , 每计算2000行会得到一个`csv`.
 
 
-# 💾 Batch Cross Analyzer For All WCA Official 3x3 Scrambles 批量分析WCA官方所有三阶打乱
+# 💾 Batch Cross Analyzer For All WCA Official 3x3 Scrambles 批量分析WCA官方所有三阶打乱的十字
 
 ## 1\. 📂 数据准备：导出 WCA 打乱数据
 
