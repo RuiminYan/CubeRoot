@@ -11,7 +11,7 @@
 
 ### A. 下载并导出数据
 
-从 https://worldcubeassociation.org/export/results 下载 `sql.zip` , 导入到 **MySQL Workbench**. 
+从 https://worldcubeassociation.org/export/results 下载 `sql.zip` , 导入到MySQL Workbench, 导入教程见 https://github.com/RuiminYan/WCA-Statistics . 
 
 执行以下查询代码, 将结果导出为 `wca_scrambles_info.csv` ,  放到 `output` 文件夹.
 
@@ -40,8 +40,6 @@
 
 ## 3\. 📝 数据结构化与导入
 
-编辑 `wca_scrambles_info.csv` ,  仅保留其中需要的行.
-
 将 `wca_scramble_cross_processor.py` 放到 `output` 文件夹, 运行得到 `wca_scrambles_info_cross.csv` .
 
-在 MySQL Workbench 中创建`cross_schema`,  用 `cross_table.sql` .
+在 MySQL Workbench 中创建`cross_schema`,  用 `cross_table.sql` 建表.
