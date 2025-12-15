@@ -1,4 +1,4 @@
-# 💾 Batch Cross Solver 批量求解
+# 💾 Batch Cross Analyzer 十字批量分析
 
 这是一个使用 [or18 solver](https://github.com/or18/RubiksSolverDemo) 批量计算三阶魔方打乱 **cross,  xcross,  xxcross,  xxxcross** 最少步.
 
