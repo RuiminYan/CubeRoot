@@ -17,18 +17,32 @@ FINAL_OUTPUT_FILENAME = 'wca_scrambles_info_cross.csv'
 # 4. cross.csv 中需要被移除的列名 (在左右拼接前)
 COLUMN_TO_DROP_IN_CROSS = 'scrambleId'
 
-# 5. 🆕 cross.csv 的完整表头列表
-CROSS_CSV_HEADERS = [
-    'scrambleId', 'Y_C', 'Y_BL', 'Y_BR', 'Y_FR', 'Y_FL', 'Y_BL_BR', 'Y_BL_FR', 'Y_BL_FL', 'Y_BR_FR', 'Y_BR_FL', 'Y_FR_FL', 'Y_BL_BR_FR', 'Y_BL_BR_FL', 'Y_BL_FR_FL', 'Y_BR_FR_FL', 
-    'W_C', 'W_BL', 'W_BR', 'W_FR', 'W_FL', 'W_BL_BR', 'W_BL_FR', 'W_BL_FL', 'W_BR_FR', 'W_BR_FL', 'W_FR_FL', 'W_BL_BR_FR', 'W_BL_BR_FL', 'W_BL_FR_FL', 'W_BR_FR_FL', 
-    'O_C', 'O_BL', 'O_BR', 'O_FR', 'O_FL', 'O_BL_BR', 'O_BL_FR', 'O_BL_FL', 'O_BR_FR', 'O_BR_FL', 'O_FR_FL', 'O_BL_BR_FR', 'O_BL_BR_FL', 'O_BL_FR_FL', 'O_BR_FR_FL', 
-    'R_C', 'R_BL', 'R_BR', 'R_FR', 'R_FL', 'R_BL_BR', 'R_BL_FR', 'R_BL_FL', 'R_BR_FR', 'R_BR_FL', 'R_FR_FL', 'R_BL_BR_FR', 'R_BL_BR_FL', 'R_BL_FR_FL', 'R_BR_FR_FL', 
-    'G_C', 'G_BL', 'G_BR', 'G_FR', 'G_FL', 'G_BL_BR', 'G_BL_FR', 'G_BL_FL', 'G_BR_FR', 'G_BR_FL', 'G_FR_FL', 'G_BL_BR_FR', 'G_BL_BR_FL', 'G_BL_FR_FL', 'G_BR_FR_FL', 
-    'B_C', 'B_BL', 'B_BR', 'B_FR', 'B_FL', 'B_BL_BR', 'B_BL_FR', 'B_BL_FL', 'B_BR_FR', 'B_BR_FL', 'B_FR_FL', 'B_BL_BR_FR', 'B_BL_BR_FL', 'B_BL_FR_FL', 'B_BR_FR_FL'
-]
-
 # 6. 🆕 MySQL 安全导入路径
 MYSQL_UPLOAD_PATH = r'C:\ProgramData\MySQL\MySQL Server 8.0\Uploads' # 使用原始字符串 r'' 避免转义问题
+
+# 7. 🆕 最终输出的完整表头顺序 (用于定义所有列，包括 cross 的部分)
+FINAL_CSV_HEADERS_ORDER = [
+    'scrambleId','scramble','competitionId','eventId','roundTypeId','groupId','isExtra','scrambleNum',
+    'Y_C','Y_BL','Y_BR','Y_FR','Y_FL','Y_BL_BR','Y_BL_FR','Y_BL_FL','Y_BR_FR','Y_BR_FL','Y_FR_FL','Y_BL_BR_FR','Y_BL_BR_FL','Y_BL_FR_FL','Y_BR_FR_FL',
+    'W_C','W_BL','W_BR','W_FR','W_FL','W_BL_BR','W_BL_FR','W_BL_FL','W_BR_FR','W_BR_FL','W_FR_FL','W_BL_BR_FR','W_BL_BR_FL','W_BL_FR_FL','W_BR_FR_FL',
+    'O_C','O_BL','O_BR','O_FR','O_FL','O_BL_BR','O_BL_FR','O_BL_FL','O_BR_FR','O_BR_FL','O_FR_FL','O_BL_BR_FR','O_BL_BR_FL','O_BL_FR_FL','O_BR_FR_FL',
+    'R_C','R_BL','R_BR','R_FR','R_FL','R_BL_BR','R_BL_FR','R_BL_FL','R_BR_FR','R_BR_FL','R_FR_FL','R_BL_BR_FR','R_BL_BR_FL','R_BL_FR_FL','R_BR_FR_FL',
+    'G_C','G_BL','G_BR','G_FR','G_FL','G_BL_BR','G_BL_FR','G_BL_FL','G_BR_FR','G_BR_FL','G_FR_FL','G_BL_BR_FR','G_BL_BR_FL','G_BL_FR_FL','G_BR_FR_FL',
+    'B_C','B_BL','B_BR','B_FR','B_FL','B_BL_BR','B_BL_FR','B_BL_FL','B_BR_FR','B_BR_FL','B_FR_FL','B_BL_BR_FR','B_BL_BR_FL','B_BL_FR_FL','B_BR_FR_FL'
+]
+
+# 8. 🆕 wca_scrambles_info.csv 的非 cross 基础列 (用于计算 cross 的起始位置)
+WCA_BASE_COLUMNS = [
+    'scrambleId','scramble','competitionId','eventId','roundTypeId','groupId','isExtra','scrambleNum'
+]
+
+# 5. 🆕 cross.csv 的完整表头列表 (基于 FINAL_CSV_HEADERS_ORDER 自动生成，消除冗余)
+# cross.csv 的表头是 scrambleId + 所有颜色数据
+# 颜色数据从索引 len(WCA_BASE_COLUMNS) = 8 开始
+CROSS_CSV_HEADERS = (
+    [FINAL_CSV_HEADERS_ORDER[0]] + # scrambleId
+    FINAL_CSV_HEADERS_ORDER[len(WCA_BASE_COLUMNS):] # Y_C 到末尾
+)
 
 # --- 核心函数 1: 上下合并所有 CSV (原 append.py 的核心逻辑) ---
 def step_1_append_all_csvs(output_filename: str, headers: list):
@@ -138,7 +152,8 @@ def check_consecutive_duplicate_rows(file_path: str, column_to_drop: str) -> boo
 # --- 核心函数 3: 左右拼接 (原 concat.py 的核心逻辑) ---
 def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, output_filename: str):
     """
-    将两个 CSV 文件左右合并。df2 (cross.csv) 必须先移除指定的重复列。
+    将两个 CSV 文件左右合并。
+    🚨 逻辑已修改：保留 df2 (cross.csv) 的 'scrambleId'，删除 df1 (wca_scrambles_info.csv) 的 'scrambleId'。
     """
     print("\n"+"="*50)
     print("🛠️ 步骤 2/2: 水平拼接 (Concat) 文件")
@@ -154,34 +169,53 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
 
     try:
         # 1. 读取两个 CSV 文件
-        df1 = pd.read_csv(df1_path) # 假设 wca_scrambles_info.csv 有表头
-        
-        # 🆕 cross.csv 现在有表头，可以直接读取
-        df2 = pd.read_csv(df2_path)
+        df1 = pd.read_csv(df1_path) # 主信息文件 wca_scrambles_info.csv
+        df2 = pd.read_csv(df2_path) # cross.csv (上下合并结果)
         
     except Exception as e:
         print(f"读取文件时发生错误: {e}")
         return
 
-    # 2. 移除第二个文件中重复的列 (即 scrambleId)
-    if column_to_drop not in df2.columns:
-        print(f"❌ 错误: 要删除的列 '{column_to_drop}' 不在 {df2_path} 的表头中。无法继续拼接。")
+    # 2. 移除重复的列
+    # 🚨 核心改动：删除 df1 (wca_scrambles_info.csv) 中的 'scrambleId'
+    if column_to_drop not in df1.columns:
+        print(f"❌ 错误: 要删除的列 '{column_to_drop}' 不在 {df1_path} 的表头中。无法继续拼接。")
         return
 
-    df2_data = df2.drop(columns=[column_to_drop])
+    df1_data = df1.drop(columns=[column_to_drop])
+    
+    # df2_data (cross.csv) 保持完整，保留 'scrambleId'
+    df2_data = df2 
 
     # 3. 左右合并：axis=1 表示按列拼接 (基于索引)
-    if len(df1) != len(df2_data):
-        print(f"⚠️ 警告: 两个文件的行数不一致！df1 ({df1_path}) 有 {len(df1)} 行，df2 ({df2_path}) 有 {len(df2_data)} 行。")
+    if len(df1_data) != len(df2_data):
+        print(f"⚠️ 警告: 两个文件的行数不一致！df1 ({df1_path}) 有 {len(df1_data)} 行，df2 ({df2_path}) 有 {len(df2_data)} 行。")
         print("将强制基于索引拼接，结果可能不可靠。")
         
-    merged_df = pd.concat([df1, df2_data], axis=1)
+    # 拼接顺序： df1_data (不含 scrambleId) + df2_data (包含 scrambleId) 
+    # 这样所有列都合并了，然后我们在下一步重新排序
+    merged_df = pd.concat([df1_data, df2_data], axis=1)
 
-    # 4. 保存为新的 CSV 文件
+    # 4. 🆕 重新排列列的顺序以符合 FINAL_CSV_HEADERS_ORDER 的要求
+    
+    # 确保所有目标列都在 merged_df 中，否则会报错
+    missing_cols = [col for col in FINAL_CSV_HEADERS_ORDER if col not in merged_df.columns]
+    if missing_cols:
+        print(f"❌ 错误: 最终表头缺少以下列，请检查文件内容和表头定义: {missing_cols}")
+        # 尝试使用现有列进行合并
+        final_cols = [col for col in FINAL_CSV_HEADERS_ORDER if col in merged_df.columns]
+        merged_df = merged_df[final_cols]
+        print(f"⚠️ 警告: 仅使用 {len(final_cols)} 列进行输出。")
+    else:
+        merged_df = merged_df[FINAL_CSV_HEADERS_ORDER]
+
+    # 5. 保存为新的 CSV 文件
     merged_df.to_csv(output_filename, index=False)
 
     print(f"✅ 使用 concat 方法合并完成！")
     print(f"新文件 **{output_filename}** 已生成 ({len(merged_df)} 行, {len(merged_df.columns)} 列)。")
+    print(f"✨ 注意：最终输出文件中的 **scrambleId** 来自 **{df2_path}**。")
+
 
 # --- 核心函数 4: 删除中间文件 ---
 def clean_up_intermediate_file(file_path: str):
