@@ -32,7 +32,7 @@
 
 ### B. 预处理
 
-用 `wca_scramble_processor.py` 对 `wca_scrambles_info.csv` 预处理, 得到多个 `part_001.txt` .
+用 `wca_scramble_processor.py` 对 `wca_scrambles_info.csv` 预处理, 得到多个 `part_001.txt` . 还会生成 `wca_scrambles_split_mbf.csv`, 将它放到 `output` 文件夹.
 
 ## 2\. 🌐 批量求解与结果合并
 
