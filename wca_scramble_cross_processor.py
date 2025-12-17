@@ -9,7 +9,7 @@ import shutil # 引入 shutil 模块用于文件复制
 APPEND_OUTPUT_FILENAME = 'cross.csv'
 
 # 2. concat.py 的输入文件 (主信息文件)
-CONCAT_INPUT_DF1 = 'wca_scrambles_info.csv'
+CONCAT_INPUT_DF1 = 'wca_scrambles_split_mbf.csv'
 
 # 3. concat.py 的输出文件名 (最终结果)
 FINAL_OUTPUT_FILENAME = 'wca_scrambles_info_cross.csv'
@@ -31,7 +31,7 @@ FINAL_CSV_HEADERS_ORDER = [
     'B_C','B_BL','B_BR','B_FR','B_FL','B_BL_BR','B_BL_FR','B_BL_FL','B_BR_FR','B_BR_FL','B_FR_FL','B_BL_BR_FR','B_BL_BR_FL','B_BL_FR_FL','B_BR_FR_FL'
 ]
 
-# 8. 🆕 wca_scrambles_info.csv 的非 cross 基础列 (用于计算 cross 的起始位置)
+# 8. 🆕 wca_scrambles_split_mbf.csv 的非 cross 基础列 (用于计算 cross 的起始位置)
 WCA_BASE_COLUMNS = [
     'scrambleId','scramble','competitionId','eventId','roundTypeId','groupId','isExtra','scrambleNum'
 ]
@@ -153,7 +153,7 @@ def check_consecutive_duplicate_rows(file_path: str, column_to_drop: str) -> boo
 def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, output_filename: str):
     """
     将两个 CSV 文件左右合并。
-    🚨 逻辑已修改：保留 df2 (cross.csv) 的 'scrambleId'，删除 df1 (wca_scrambles_info.csv) 的 'scrambleId'。
+    🚨 逻辑已修改：保留 df2 (cross.csv) 的 'scrambleId'，删除 df1 (wca_scrambles_split_mbf.csv) 的 'scrambleId'。
     """
     print("\n"+"="*50)
     print("🛠️ 步骤 2/2: 水平拼接 (Concat) 文件")
@@ -169,7 +169,7 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
 
     try:
         # 1. 读取两个 CSV 文件
-        df1 = pd.read_csv(df1_path) # 主信息文件 wca_scrambles_info.csv
+        df1 = pd.read_csv(df1_path) # 主信息文件 wca_scrambles_split_mbf.csv
         df2 = pd.read_csv(df2_path) # cross.csv (上下合并结果)
         
     except Exception as e:
@@ -177,7 +177,7 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
         return
 
     # 2. 移除重复的列
-    # 🚨 核心改动：删除 df1 (wca_scrambles_info.csv) 中的 'scrambleId'
+    # 🚨 核心改动：删除 df1 (wca_scrambles_split_mbf.csv) 中的 'scrambleId'
     if column_to_drop not in df1.columns:
         print(f"❌ 错误: 要删除的列 '{column_to_drop}' 不在 {df1_path} 的表头中。无法继续拼接。")
         return
@@ -296,3 +296,4 @@ if __name__ == "__main__":
         
         # 🆕 如果步骤 1 失败，但文件可能存在 (例如，之前运行遗留)，仍尝试清理
         clean_up_intermediate_file(APPEND_OUTPUT_FILENAME)
+
