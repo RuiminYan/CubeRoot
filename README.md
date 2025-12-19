@@ -4,6 +4,7 @@
 
 在Chrome中打开 [https://or18.github.io/RubiksSolverDemo/](https://or18.github.io/RubiksSolverDemo/) , 按 `F12` 打开控制台, 执行 `batch_cross_analyzer.js` 中的代码, 弹窗时选择仅含编号列和打乱列的`txt` , 每计算2000行会得到一个`_part_1.csv`.
 
+<br>
 
 # 💾 Batch Cross Analyzer For All WCA Official 3x3 Scrambles 批量分析WCA官方所有三阶打乱的十字
 
