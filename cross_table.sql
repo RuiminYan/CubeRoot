@@ -243,11 +243,11 @@ ORDER BY
 
 
 -- 找特定的打乱
-SELECT
-    scramble
-FROM
-    cross_table
-WHERE
-    CN_XXXC = 5;
+SELECT 
+    * FROM 
+    cross_table 
+ORDER BY 
+    CN_XC ASC 
+LIMIT 100;
 
  
