@@ -16,20 +16,22 @@
 
 执行以下查询代码, 将结果导出为 `wca_scrambles_info.csv` ,  放到 `output` 文件夹.
 
-    SELECT
-        scrambleId, 
-        scramble, 
-        competitionId, 
-        eventId, 
-        roundTypeId,
-        groupId,
-        isExtra,
-        scrambleNum
-    FROM
-        wca_export.scrambles
-    WHERE
-        eventId IN ('333', '333bf', '333oh', '333ft', '333fm', '333mbf')
-        AND scrambleId > 5259372 -- **请根据需求更新起始ID**
+```
+SELECT
+    id, 
+    scramble, 
+    competition_id, 
+    event_id, 
+    round_type_id,
+    group_id,
+    is_extra,
+    scramble_num
+FROM
+    wca_export.scrambles
+WHERE
+    event_id IN ('333', '333bf', '333oh', '333ft', '333fm', '333mbf')
+    AND id > 5227483 -- **请根据需求更新起始id**
+```
 
 ### B. 预处理
 
