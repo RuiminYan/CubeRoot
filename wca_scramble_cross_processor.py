@@ -15,14 +15,14 @@ CONCAT_INPUT_DF1 = 'wca_scrambles_split_mbf.csv'
 FINAL_OUTPUT_FILENAME = 'wca_scrambles_info_cross.csv'
 
 # 4. cross.csv 中需要被移除的列名 (在左右拼接前)
-COLUMN_TO_DROP_IN_CROSS = 'scrambleId'
+COLUMN_TO_DROP_IN_CROSS = 'id'
 
 # 6. 🆕 MySQL 安全导入路径
 MYSQL_UPLOAD_PATH = r'C:\ProgramData\MySQL\MySQL Server 8.0\Uploads' # 使用原始字符串 r'' 避免转义问题
 
 # 7. 🆕 最终输出的完整表头顺序 (用于定义所有列，包括 cross 的部分)
 FINAL_CSV_HEADERS_ORDER = [
-    'scrambleId','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num',
+    'id','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num',
     'Y_C','Y_BL','Y_BR','Y_FR','Y_FL','Y_BL_BR','Y_BL_FR','Y_BL_FL','Y_BR_FR','Y_BR_FL','Y_FR_FL','Y_BL_BR_FR','Y_BL_BR_FL','Y_BL_FR_FL','Y_BR_FR_FL',
     'W_C','W_BL','W_BR','W_FR','W_FL','W_BL_BR','W_BL_FR','W_BL_FL','W_BR_FR','W_BR_FL','W_FR_FL','W_BL_BR_FR','W_BL_BR_FL','W_BL_FR_FL','W_BR_FR_FL',
     'O_C','O_BL','O_BR','O_FR','O_FL','O_BL_BR','O_BL_FR','O_BL_FL','O_BR_FR','O_BR_FL','O_FR_FL','O_BL_BR_FR','O_BL_BR_FL','O_BL_FR_FL','O_BR_FR_FL',
@@ -33,14 +33,14 @@ FINAL_CSV_HEADERS_ORDER = [
 
 # 8. 🆕 wca_scrambles_split_mbf.csv 的非 cross 基础列 (用于计算 cross 的起始位置)
 WCA_BASE_COLUMNS = [
-    'scrambleId','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num'
+    'id','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num'
 ]
 
 # 5. 🆕 cross.csv 的完整表头列表 (基于 FINAL_CSV_HEADERS_ORDER 自动生成，消除冗余)
-# cross.csv 的表头是 scrambleId + 所有颜色数据
+# cross.csv 的表头是 id + 所有颜色数据
 # 颜色数据从索引 len(WCA_BASE_COLUMNS) = 8 开始
 CROSS_CSV_HEADERS = (
-    [FINAL_CSV_HEADERS_ORDER[0]] + # scrambleId
+    [FINAL_CSV_HEADERS_ORDER[0]] + # id
     FINAL_CSV_HEADERS_ORDER[len(WCA_BASE_COLUMNS):] # Y_C 到末尾
 )
 
@@ -104,11 +104,11 @@ def step_1_append_all_csvs(output_filename: str, headers: list):
 # --- 核心函数 2: 检查连续重复行 (原 CheckConsecutiveDuplicates_ExclFirstCol.py 的核心逻辑) ---
 def check_consecutive_duplicate_rows(file_path: str, column_to_drop: str) -> bool:
     """
-    检查 CSV 文件中（排除指定的列，即 scrambleId）是否存在连续相同的两行，并打印结果。
+    检查 CSV 文件中（排除指定的列，即 id）是否存在连续相同的两行，并打印结果。
     由于 cross.csv 现在有表头，读取方式已调整。
     """
     print("\n"+"-"*50)
-    print("🔍 可选检查: 检查连续重复行 (排除第一列/scrambleId)")
+    print("🔍 可选检查: 检查连续重复行 (排除第一列/id)")
     print("-" * 50)
     
     if not os.path.exists(file_path):
@@ -126,7 +126,7 @@ def check_consecutive_duplicate_rows(file_path: str, column_to_drop: str) -> boo
         print("警告: 文件内容为空或列数不足。跳过检查。")
         return False
 
-    # 确定用于检查的 DataFrame (排除 'scrambleId' 列)
+    # 确定用于检查的 DataFrame (排除 'id' 列)
     if column_to_drop not in df.columns:
         print(f"❌ 错误: 要排除的列 '{column_to_drop}' 不在文件表头中。跳过检查。")
         return False
@@ -153,7 +153,7 @@ def check_consecutive_duplicate_rows(file_path: str, column_to_drop: str) -> boo
 def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, output_filename: str):
     """
     将两个 CSV 文件左右合并。
-    🚨 逻辑已修改：保留 df2 (cross.csv) 的 'scrambleId'，删除 df1 (wca_scrambles_split_mbf.csv) 的 'scrambleId'。
+    🚨 逻辑已修改：保留 df2 (cross.csv) 的 'id'，删除 df1 (wca_scrambles_split_mbf.csv) 的 'id'。
     """
     print("\n"+"="*50)
     print("🛠️ 步骤 2/2: 水平拼接 (Concat) 文件")
@@ -177,14 +177,14 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
         return
 
     # 2. 移除重复的列
-    # 🚨 核心改动：删除 df1 (wca_scrambles_split_mbf.csv) 中的 'scrambleId'
+    # 🚨 核心改动：删除 df1 (wca_scrambles_split_mbf.csv) 中的 'id'
     if column_to_drop not in df1.columns:
         print(f"❌ 错误: 要删除的列 '{column_to_drop}' 不在 {df1_path} 的表头中。无法继续拼接。")
         return
 
     df1_data = df1.drop(columns=[column_to_drop])
     
-    # df2_data (cross.csv) 保持完整，保留 'scrambleId'
+    # df2_data (cross.csv) 保持完整，保留 'id'
     df2_data = df2 
 
     # 3. 左右合并：axis=1 表示按列拼接 (基于索引)
@@ -192,7 +192,7 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
         print(f"⚠️ 警告: 两个文件的行数不一致！df1 ({df1_path}) 有 {len(df1_data)} 行，df2 ({df2_path}) 有 {len(df2_data)} 行。")
         print("将强制基于索引拼接，结果可能不可靠。")
         
-    # 拼接顺序： df1_data (不含 scrambleId) + df2_data (包含 scrambleId) 
+    # 拼接顺序： df1_data (不含 id) + df2_data (包含 id) 
     # 这样所有列都合并了，然后我们在下一步重新排序
     merged_df = pd.concat([df1_data, df2_data], axis=1)
 
@@ -214,7 +214,7 @@ def step_2_concat_files(df1_path: str, df2_path: str, column_to_drop: str, outpu
 
     print(f"✅ 使用 concat 方法合并完成！")
     print(f"新文件 **{output_filename}** 已生成 ({len(merged_df)} 行, {len(merged_df.columns)} 列)。")
-    print(f"✨ 注意：最终输出文件中的 **scrambleId** 来自 **{df2_path}**。")
+    print(f"✨ 注意：最终输出文件中的 **id** 来自 **{df2_path}**。")
 
 
 # --- 核心函数 4: 删除中间文件 ---
