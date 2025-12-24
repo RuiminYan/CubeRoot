@@ -66,8 +66,8 @@ def step1_process_mbf_scrambles(input_file_path, output_file_path):
             df['original_index'] = df.index
             
             # 分离数据
-            mbf_df = df[df['eventId'] == '333mbf'].copy()
-            other_df = df[df['eventId'] != '333mbf'].copy()
+            mbf_df = df[df['event_id'] == '333mbf'].copy()
+            other_df = df[df['event_id'] != '333mbf'].copy()
             
             mbf_count = len(mbf_df)
             print(f"    共加载 {total_rows} 条记录，其中 {mbf_count} 条为 '333mbf' 多盲记录。")

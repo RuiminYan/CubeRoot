@@ -22,7 +22,7 @@ MYSQL_UPLOAD_PATH = r'C:\ProgramData\MySQL\MySQL Server 8.0\Uploads' # 使用原
 
 # 7. 🆕 最终输出的完整表头顺序 (用于定义所有列，包括 cross 的部分)
 FINAL_CSV_HEADERS_ORDER = [
-    'scrambleId','scramble','competitionId','eventId','roundTypeId','groupId','isExtra','scrambleNum',
+    'scrambleId','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num',
     'Y_C','Y_BL','Y_BR','Y_FR','Y_FL','Y_BL_BR','Y_BL_FR','Y_BL_FL','Y_BR_FR','Y_BR_FL','Y_FR_FL','Y_BL_BR_FR','Y_BL_BR_FL','Y_BL_FR_FL','Y_BR_FR_FL',
     'W_C','W_BL','W_BR','W_FR','W_FL','W_BL_BR','W_BL_FR','W_BL_FL','W_BR_FR','W_BR_FL','W_FR_FL','W_BL_BR_FR','W_BL_BR_FL','W_BL_FR_FL','W_BR_FR_FL',
     'O_C','O_BL','O_BR','O_FR','O_FL','O_BL_BR','O_BL_FR','O_BL_FL','O_BR_FR','O_BR_FL','O_FR_FL','O_BL_BR_FR','O_BL_BR_FL','O_BL_FR_FL','O_BR_FR_FL',
@@ -33,7 +33,7 @@ FINAL_CSV_HEADERS_ORDER = [
 
 # 8. 🆕 wca_scrambles_split_mbf.csv 的非 cross 基础列 (用于计算 cross 的起始位置)
 WCA_BASE_COLUMNS = [
-    'scrambleId','scramble','competitionId','eventId','roundTypeId','groupId','isExtra','scrambleNum'
+    'scrambleId','scramble','competition_id','event_id','round_type_id','group_id','is_extra','scramble_num'
 ]
 
 # 5. 🆕 cross.csv 的完整表头列表 (基于 FINAL_CSV_HEADERS_ORDER 自动生成，消除冗余)
