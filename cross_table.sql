@@ -244,10 +244,10 @@ ORDER BY
 
 -- 找特定的打乱
 SELECT 
-    * FROM 
+    id, scramble, competition_id, event_id, round_type_id, group_id, is_extra, scramble_num, DUAL_C, DUAL_XC, DUAL_XXC, DUAL_XXXC FROM 
     cross_table 
 ORDER BY 
-    CN_XC ASC 
-LIMIT 100;
+    DUAL_XXXC ASC 
+LIMIT 25;
 
  
