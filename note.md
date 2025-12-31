@@ -1,6 +1,12 @@
 该程序用于分析给定打乱公式在不同朝向下，完成 cross, xcross, xxcross, xxxcross 和 xxxxcross 所需的最少步。
 
-使用了 4-bit packing
+编译和运行：
+```
+g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
+echo scramble.txt | .\analyzer.exe
+```
+
+特点：使用了 4-bit packing
 
 -   **角块**：状态值 = ID × 3 + 色向 (0,1,2)
 -   **棱块**：状态值 = ID × 2 + 色向 (0,1)
