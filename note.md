@@ -11,13 +11,13 @@ xxxxcross表示还原cross+4组F2L
 
 analyzer_pseudo.cpp求解了psc(即pseudo_cross),psxc(即pseudo_xcross),psxxc(即pseudo_xxcross),psxxxc(即pseudo_xxxcross)的最少步.
 
-pseudo_cross表示还原cross, 但是可以差最后一步D/D'/D2.
+pseudo_cross表示还原cross, 允许D层偏移.
 
-pseudo_xcross表示还原cross+1个底层角块+1个中层棱块, 同样可以差最后一步D/D'/D2.
+pseudo_xcross表示还原cross+1个底层角块+1个中层棱块, 允许D层偏移.
 
-pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 同样可以差最后一步D/D'/D2.
+pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 允许D层偏移.
 
-pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 同样可以差最后一步D/D'/D2.
+pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 允许D层偏移.
 
 编译和运行：
 ```
