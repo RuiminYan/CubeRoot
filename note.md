@@ -26,6 +26,14 @@ pair (基态), 全称free pair, 指的是能通过0步或3步入槽的F2L, 例�
 
 pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
 
+定义cross + 1 pair. 例如cross + 1 pair(BL槽)是对BL槽xcross的拓展, 包含的状态不仅有BL槽已经还原的xcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xcross(BL槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xcross(BL槽)的状态.
+
+定义xcross + 1 pair. 例如xcross(BR槽) + 1 pair(BL槽)是xxcross(BR槽+BL槽)的拓展, 包含的状态不仅有BR槽+BL槽都已经还原的xxcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xxcross(BR槽+BL槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xxcross(BR槽+BL槽)的状态.
+
+定义xxcross + 1 pair. 例如xxcross(BR槽+FR槽) + 1 pair(BL槽)是xxcross(BR槽+BL槽)的拓展, 包含的状态不仅有BL槽+BR槽+FR槽都已经还原的xxcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xxxcross(BL槽+BR槽+FR槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xxxcross(BL槽+BR槽+FR槽)的状态.
+
+定义xxxcross + 1 pair. 例如xxxcross(BR槽+FR槽+FL槽) + 1 pair(BL槽)是xxxxcross(BL槽+BR槽+FR槽+FL槽)的拓展, 包含的状态不仅有BL槽+BR槽+FR槽+FL槽都已经还原的xxxxcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xxxxcross(BL槽+BR槽+FR槽+FL槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xxxcrossxxxxcross(BL槽+BR槽+FR槽+FL槽)的状态.
+
 
 pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
 
