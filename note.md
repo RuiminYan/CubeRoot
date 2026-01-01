@@ -22,7 +22,7 @@ pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 允许D层偏
 pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 允许D层偏移.
 
 
-pair, 全称free pair, 指的是能通过0步或3步入槽的F2L, 例如R U R', R U' R', R U2 R'及其镜像等，当然开头可以有U层调整，例如U' R U R'. 当然, 如果某一组F2L已经还原了 (即0步入槽), 我们也称这一组F2L为free pair.
+pair (基态), 全称free pair, 指的是能通过0步或3步入槽的F2L, 例如R U R', R U' R', R U2 R'及其镜像等，当然开头可以有U层调整，例如U' R U R'. 当然, 如果某一组F2L已经还原了 (即0步入槽), 我们也称这一组F2L为free pair.
 
 pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
 
