@@ -48,7 +48,7 @@ g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
 echo scramble.txt | .\analyzer.exe
 ```
 
-特点：使用了 4-bit packing
+使用 4-bit packing
 
 -   **角块**：状态值 = ID × 3 + 色向 (0,1,2)
 -   **棱块**：状态值 = ID × 2 + 色向 (0,1)
