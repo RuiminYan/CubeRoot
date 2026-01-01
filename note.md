@@ -34,7 +34,28 @@ echo scramble.txt | .\analyzer.exe
 -   **E9 (DR)**: 底层右棱块，状态值 = 18    
 -   **E10 (DF)**: 底层前棱块，状态值 = 20    
 -   **E11 (DL)**: 底层左棱块，状态值 = 22
-    
+
+analyzer_std.cpp求解了cross,xc(即xcross),xxc(即xxcross),xxxc(即xxxcross),xxxxc(即xxxxcross)的最少步.
+
+xcross表示还原cross+1组F2L
+
+xxcross表示还原cross+2组F2L
+
+xxxcross表示还原cross+3组F2L
+
+xxxxcross表示还原cross+4组F2L
+
+
+analyzer_pseudo.cpp求解了psc(即pseudo_cross),psxc(即pseudo_xcross),psxxc(即pseudo_xxcross),psxxxc(即pseudo_xxxcross)的最少步.
+
+pseudo_cross表示还原cross, 但是可以差最后一步D/D'/D2.
+
+pseudo_xcross表示还原cross+1个底层角块+1个中层棱块, 同样可以差最后一步D/D'/D2.
+
+pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 同样可以差最后一步D/D'/D2.
+
+pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 同样可以差最后一步D/D'/D2.
+
 角块位置图
 
               +-------+
