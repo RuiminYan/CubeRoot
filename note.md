@@ -1,3 +1,5 @@
+这里给出了一系列三阶魔方不完整状态的最少步求解器.
+
 analyzer_std.cpp求解了cross,xc(即xcross),xxc(即xxcross),xxxc(即xxxcross),xxxxc(即xxxxcross)的最少步.
 
 xcross表示还原cross+1组F2L
@@ -20,8 +22,12 @@ pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 允许D层偏
 pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 允许D层偏移.
 
 
-pair_analyzer.cpp求解了cp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
+pair, 全称free pair, 指的是能通过0步或3步入槽的F2L, 例如R U R', R U' R', R U2 R'及其镜像等，当然开头可以有U层调整，例如U' R U R'. 当然, 如果某一组F2L已经还原了 (即0步入槽), 我们也称这一组F2L为free pair.
 
+pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
+
+
+pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
 
 pseudo_pair_analyzer.cpp求解了pscp(即pseudo_cross + 1 pair),psxcp(即pseudo_xcross + 1 pair),psxxcp(即pseudo_xxcross + 1 pair),psxxxcp(即pseudo_xxxcross + 1 pair)的最少步.
 
