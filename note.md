@@ -19,6 +19,15 @@ pseudo_xxcross表示还原cross+2个底层角块+2个中层棱块, 允许D层偏
 
 pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 允许D层偏移.
 
+
+pair_analyzer.cpp求解了cp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
+
+
+pseudo_pair_analyzer.cpp求解了pscp(即pseudo_cross + 1 pair),psxcp(即pseudo_xcross + 1 pair),psxxcp(即pseudo_xxcross + 1 pair),psxxxcp(即pseudo_xxxcross + 1 pair)的最少步.
+
+
+eo_cross_analyzer.cpp求解了eoc(即cross+eo),eoxc(即xcross+eo),eoxxc(即xxcross+eo),eoxxxc(即xxxcross+eo)的最少步.
+
 编译和运行：
 ```
 g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
