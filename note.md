@@ -29,7 +29,7 @@ pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp
 
 pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
 
-pseudo_pair_analyzer.cpp求解了pscp(即pseudo_cross + 1 pair),psxcp(即pseudo_xcross + 1 pair),psxxcp(即pseudo_xxcross + 1 pair),psxxxcp(即pseudo_xxxcross + 1 pair)的最少步.
+pseudo_pair_analyzer.cpp求解了pscp(即pseudo_cross + 1 pseudo pair),psxcp(即pseudo_xcross + 1 pseudo pair),psxxcp(即pseudo_xxcross + 1 pseudo pair),psxxxcp(即pseudo_xxxcross + 1 pseudo pair)的最少步.
 
 
 eo_cross_analyzer.cpp求解了eoc(即cross+eo),eoxc(即xcross+eo),eoxxc(即xxcross+eo),eoxxxc(即xxxcross+eo)的最少步.
