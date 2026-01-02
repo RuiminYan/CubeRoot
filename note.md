@@ -1,3 +1,5 @@
+需要做的优化：移除Emscripten 代码, 实现本地运行，生成剪枝表写入硬盘，多线程 (OpenMP)，只保留聚合数据（最小值），分支定界（Branch and Bound），旋转对称优化（conj）
+
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
 analyzer_std.cpp求解了cross,xc(即xcross),xxc(即xxcross),xxxc(即xxxcross),xxxxc(即xxxxcross)的最少步.
