@@ -1,8 +1,8 @@
-需要做的优化：移除Emscripten 代码, 实现本地运行，生成剪枝表写入硬盘，多线程 (OpenMP)，只保留聚合数据（最小值）(aggregation)，分支定界（Branch and Bound），任务排序 (Task Sorting)，旋转对称优化（conj）
+需要做的优化：移除Emscripten 代码, 实现本地运行，生成剪枝表写入硬盘，4位打包 (4-bit packing), 多线程 (OpenMP)，只保留聚合数据（最小值）(aggregation)，分支定界（Branch and Bound），任务排序 (Task Sorting)，旋转对称优化（conj）
 
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
-analyzer_std.cpp求解了cross,xc(即xcross),xxc(即xxcross),xxxc(即xxxcross),xxxxc(即xxxxcross)的最少步.
+std_analyzer.cpp求解了cross,xc(即xcross),xxc(即xxcross),xxxc(即xxxcross),xxxxc(即xxxxcross)的最少步.
 
 xcross表示还原cross+1组F2L
 
@@ -13,7 +13,7 @@ xxxcross表示还原cross+3组F2L
 xxxxcross表示还原cross+4组F2L
 
 
-analyzer_pseudo.cpp求解了psc(即pseudo_cross),psxc(即pseudo_xcross),psxxc(即pseudo_xxcross),psxxxc(即pseudo_xxxcross)的最少步.
+pseudo_analyzer.cpp求解了psc(即pseudo_cross),psxc(即pseudo_xcross),psxxc(即pseudo_xxcross),psxxxc(即pseudo_xxxcross)的最少步.
 
 pseudo_cross表示还原cross, 允许D层偏移.
 
@@ -49,8 +49,6 @@ eo_cross_analyzer.cpp求解了eoc(即cross+eo),eoxc(即xcross+eo),eoxxc(即xxcro
 g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
 echo scramble.txt | .\analyzer.exe
 ```
-
-使用 4-bit packing
 
 -   **角块**：状态值 = ID × 3 + 色向 (0,1,2)
 -   **棱块**：状态值 = ID × 2 + 色向 (0,1)
