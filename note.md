@@ -1,4 +1,4 @@
-需要做的优化：移除Emscripten 代码, 实现本地运行，生成移动表(move_table_.bin)和剪枝表(prune_table_.bin)写入硬盘并打印剪枝表的分布，打印Done in (时间)s, 4位打包 (4-bit packing), 多线程 (OpenMP)，只保留聚合数据（最小值）(aggregation)，分支定界（Branch and Bound），任务排序 (Task Sorting)，旋转对称优化（conj）
+需要做的优化：移除Emscripten 代码, 实现本地运行，生成移动表(move_table_.bin)和剪枝表(prune_table_.bin)写入硬盘并打印剪枝表的分布，打印Done in (时间)s, 4位打包 (4-bit packing), 只保留聚合数据（最小值）(aggregation)，分支定界（Branch and Bound），任务排序 (Task Sorting)，多线程 (OpenMP)，旋转对称优化（conj）
 
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
