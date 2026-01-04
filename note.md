@@ -31,6 +31,8 @@ pseudo_xxxcross表示还原cross+3个底层角块+3个中层棱块, 允许D层�
 
 pair (基态), 全称free pair, 指的是能通过0步或3步入槽的F2L, 例如R U R', R U' R', R U2 R'及其镜像等，当然开头可以有U层调整，例如U' R U R'. 当然, 如果某一组F2L已经还原了 (即0步入槽), 我们也称这一组F2L为free pair.
 
+pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
+
 pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp(即xxcross + 1 pair),xxxcp(即xxxcross + 1 pair)的最少步.
 
 定义cross + 1 pair. 例如cross + 1 pair(BL槽)是对BL槽xcross的拓展, 包含的状态不仅有BL槽已经还原的xcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xcross(BL槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xcross(BL槽)的状态.
@@ -42,9 +44,16 @@ pair_analyzer.cpp求解了crossp(即cross + 1 pair),xcp(即xcross + 1 pair),xxcp
 定义xxxcross + 1 pair. 例如xxxcross(BR槽+FR槽+FL槽) + 1 pair(BL槽)是xxxxcross(BL槽+BR槽+FR槽+FL槽)的拓展, 包含的状态不仅有BL槽+BR槽+FR槽+FL槽都已经还原的xxxxcross，还包括通过L U L', L U' L', B' U B, B' U' B就能变成xxxxcross(BL槽+BR槽+FR槽+FL槽)的状态，以及通过转动U层，再通过L U L', L U' L', B' U B, B' U' B变成xxxcrossxxxxcross(BL槽+BR槽+FR槽+FL槽)的状态.
 
 
-pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
 
-pseudo_pair_analyzer.cpp求解了pscp(即pseudo_cross + 1 pseudo pair),psxcp(即pseudo_xcross + 1 pseudo pair),psxxcp(即pseudo_xxcross + 1 pseudo pair),psxxxcp(即pseudo_xxxcross + 1 pseudo pair)的最少步.
+
+
+
+
+pseudo_pair_analyzer.cpp求解了pseudo_cross + pseudo_pair, pseudo_xcross + pseudo_pair, pseudo_xxcross + pseudo_pair, pseudo_xxxcross + pseudo_pair的最少步.
+
+定义pseudo_cross + pseudo_pair, 例如cross + 1 pseudo pair(BL槽)表示允许D层偏移的cross, 加上
+
+
 
 
 eo_cross_analyzer.cpp求解了eoc(即cross+eo),eoxc(即xcross+eo),eoxxc(即xxcross+eo),eoxxxc(即xxxcross+eo)的最少步.
