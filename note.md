@@ -8,6 +8,14 @@ pair (基态), 全称free pair, 指的是能通过0步或3步入槽的F2L, 例�
 
 pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
 
+### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
+
+编译和运行：
+```
+g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
+echo scramble.txt | .\analyzer.exe
+```
+
 
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
@@ -58,14 +66,6 @@ pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块
 - 定义pseudo_xxxcross + pseudo_pair, 例如pseudo_xxxcross(FL棱+FR棱+BR棱+DFR角+DBL角+DFL角) + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxxxcross的状态, 也就是允许D层偏移的xxxxcross.
 
 
-### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
-
-编译和运行：
-```
-g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
-echo scramble.txt | .\analyzer.exe
-```
-
 -   **角块**：状态值 = ID × 3 + 色向 (0,1,2)
 -   **棱块**：状态值 = ID × 2 + 色向 (0,1)
 
@@ -93,7 +93,7 @@ echo scramble.txt | .\analyzer.exe
 -   **E10 (DF)**: 底层前棱块，状态值 = 20    
 -   **E11 (DL)**: 底层左棱块，状态值 = 22
 
-剪枝表的名称遵循块物理ID
+剪枝表的命名遵循块的物理ID
 
 角块位置图
 
