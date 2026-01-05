@@ -30,7 +30,6 @@ echo scramble.txt | .\analyzer.exe
 - xxxxcross表示还原cross+4组F2L
 
 
-
 ### pseudo_analyzer.cpp求解了pseudo_cross, pseudo_xcross, pseudo_xxcross, pseudo_xxxcross的最少步.
 
 - pseudo_cross表示cross(允许D层偏移). 
@@ -42,7 +41,6 @@ echo scramble.txt | .\analyzer.exe
 - pseudo_xxxcross表示cross(允许D层偏移) + 3个中层棱块(相对于中心) + 3个底层角块(相对于pseudo_cross), 允许该底层角块和该中层棱块不属于同3组F2L. 例如pseudo_xxxcross(BL棱+BR棱+FR棱+BL角+BR角+FL角)
 
 
-
 ### pair_analyzer.cpp求解了cross + pair, xcross + pair, xxcross + pair,xxxcross + pair的最少步.
 
 - 定义cross + pair. 例如cross + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xcross(BL槽)的状态.
@@ -52,7 +50,6 @@ echo scramble.txt | .\analyzer.exe
 - 定义xxcross + pair. 例如xxcross(BR槽+FR槽) + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxcross(BL槽+BR槽+FR槽)的状态
 
 - 定义xxxcross + pair. 例如xxxcross(BR槽+FR槽+FL槽) + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxxcross(BL槽+BR槽+FR槽+FL槽)的状态
-
 
 
 ### pseudo_pair_analyzer.cpp求解了pseudo_cross + pseudo_pair, pseudo_xcross + pseudo_pair, pseudo_xxcross + pseudo_pair, pseudo_xxxcross + pseudo_pair的最少步.
