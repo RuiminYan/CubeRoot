@@ -1,4 +1,4 @@
-需要做的优化：移除Emscripten 代码, 实现本地运行，生成移动表(move_table_.bin)和剪枝表(prune_table_.bin)写入硬盘并打印剪枝表的分布，打印Done in X.XXs, 4位打包 (4-bit packing), 只保留聚合数据（最小值）(aggregation)，加入I/O接口, 分支定界（Branch and Bound），任务排序 (Task Sorting)，多线程 (OpenMP)，旋转对称优化（conj）
+需要做的优化：移除Emscripten 代码, 实现本地运行，生成移动表(move_table_.bin)和剪枝表(prune_table_.bin)写入硬盘并打印剪枝表的分布，打印Done in X.XXs, 4位打包 (4-bit packing), 只保留聚合数据（最小值）(aggregation)，加入I/O接口, 分支定界（Branch and Bound），任务排序 (Task Sorting)，多线程 (OpenMP)，槽位旋转对称性复用 (Slot Conjugation)
 
 加入I/O接口: 输入的文件类型是.txt, 内容的格式为id,打乱, 例如
 22001,B2 U' L2 U F2 L2 D2 L2 U F2 L F2 L D U L' D2 F' U2 B
@@ -7,8 +7,6 @@
 pair (基态), 全称free pair, 指的是能通过0步或3步入槽的F2L, 例如R U R', R U' R', R U2 R'及其镜像等，当然开头可以有U层调整，例如U' R U R'. 当然, 如果某一组F2L已经还原了 (即0步入槽), 我们也称这一组F2L为free pair.
 
 pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块的目标槽，同时将棱块放入棱块的目标槽, 注意不要求是同一个槽位.
-
-### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
 
 编译和运行：
 ```
@@ -28,6 +26,11 @@ echo scramble.txt | .\analyzer.exe
 - xxxcross表示还原cross+3组F2L
 
 - xxxxcross表示还原cross+4组F2L
+
+
+### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
+
+
 
 
 ### pseudo_analyzer.cpp求解了pseudo_cross, pseudo_xcross, pseudo_xxcross, pseudo_xxxcross的最少步.
