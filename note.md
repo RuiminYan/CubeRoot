@@ -11,62 +11,54 @@ pseudo pair, 全称pseudo free pair, 指的是能通过3步将角块放入角块
 
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
-std_analyzer.cpp求解了cross,xcross,xxcross,xxxcross,xxxxcross的最少步.
+### std_analyzer.cpp求解了cross,xcross,xxcross,xxxcross,xxxxcross的最少步.
 
-xcross表示还原cross+1组F2L
+- xcross表示还原cross+1组F2L
 
-xxcross表示还原cross+2组F2L
+- xxcross表示还原cross+2组F2L
 
-xxxcross表示还原cross+3组F2L
+- xxxcross表示还原cross+3组F2L
 
-xxxxcross表示还原cross+4组F2L
-
-
-
-pseudo_analyzer.cpp求解了pseudo_cross, pseudo_xcross, pseudo_xxcross, pseudo_xxxcross的最少步.
-
-pseudo_cross表示还原cross, 允许D层偏移. 
-
-pseudo_xcross表示还原cross(允许D层偏移) + 1个中层棱块(相对于中心) + 1个底层角块(相对于cross), 允许该底层角块和该中层棱块不属于同1组F2L. 例如pseudo_xcross(BR棱+DBL角)
-
-pseudo_xxcross表示还原cross(允许D层偏移) + 2个中层棱块(相对于中心) + 2个底层角块(相对于cross), 允许该底层角块和该中层棱块不属于同2组F2L. 例如pseudo_xxcross(BL棱+BR棱+FR角+FL角)
-
-pseudo_xxxcross表示还原cross(允许D层偏移) + 3个中层棱块(相对于中心) + 3个底层角块(相对于cross), 允许该底层角块和该中层棱块不属于同3组F2L. 例如pseudo_xxxcross(BL棱+BR棱+FR棱+BL角+BR角+FL角)
+- xxxxcross表示还原cross+4组F2L
 
 
 
+### pseudo_analyzer.cpp求解了pseudo_cross, pseudo_xcross, pseudo_xxcross, pseudo_xxxcross的最少步.
 
-pair_analyzer.cpp求解了cross + pair, xcross + pair, xxcross + pair,xxxcross + pair的最少步.
+- pseudo_cross表示cross(允许D层偏移). 
 
-定义cross + pair. 例如cross + pair(BL槽)是对BL槽xcross的拓展, 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xcross(BL槽)的状态.
+- pseudo_xcross表示cross(允许D层偏移) + 1个中层棱块(相对于中心) + 1个底层角块(相对于pseudo_cross), 允许该底层角块和该中层棱块不属于同1组F2L. 例如pseudo_xcross(BR棱+DBL角)
 
-定义xcross + pair. 例如xcross(BR槽) + pair(BL槽)是xxcross(BR槽+BL槽)的拓展, 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxcross(BR槽+BL槽)的状态
+- pseudo_xxcross表示cross(允许D层偏移) + 2个中层棱块(相对于中心) + 2个底层角块(相对于pseudo_cross), 允许该底层角块和该中层棱块不属于同2组F2L. 例如pseudo_xxcross(BL棱+BR棱+FR角+FL角)
 
-定义xxcross + pair. 例如xxcross(BR槽+FR槽) + pair(BL槽)是xxcross(BR槽+BL槽)的拓展, 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxcross(BL槽+BR槽+FR槽)的状态
-
-定义xxxcross + pair. 例如xxxcross(BR槽+FR槽+FL槽) + pair(BL槽)是xxxxcross(BL槽+BR槽+FR槽+FL槽)的拓展, 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxxcross(BL槽+BR槽+FR槽+FL槽)的状态
-
-
-
-pseudo_pair_analyzer.cpp求解了pseudo_cross + pseudo_pair, pseudo_xcross + pseudo_pair, pseudo_xxcross + pseudo_pair, pseudo_xxxcross + pseudo_pair的最少步.
-
-定义pseudo_cross + pseudo_pair, 例如pseudo_cross + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xcross(BL棱+DBR角)的状态
-
-
-pseudo_xxcross(BL棱+BR棱+FR角+FL角)
-
-
-定义pseudo_xcross + pseudo_pair, 例如pseudo_xcross(BL棱+DBR角) + pseudo pair(FR棱+DBL角)包含的状态不仅有pseudo_xxcross(BL棱+DBR角+FR棱+DBL角), 还包括通过L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxcross(BL棱+BR棱+FR角+FL角)的状态.
-
-定义pseudo_xxcross + pseudo_pair, 例如pseudo_xxcross + pseudo pair(BL棱+BR棱+FR棱+BL角+BR角+FL角)包含的状态不仅有pseudo_xxxcross(BL棱+BR棱+FR棱+BL角+BR角+FL角), 还包括通过L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxxcross(BL棱+BR棱+FR棱+BL角+BR角+FL角)的状态.
-
-定义pseudo_xxxcross + pseudo_pair, 例如pseudo_xxxcross + pseudo pair(BR棱+DBL角)包含的状态不仅有pseudo_xxxxcross(BR棱+DBL角), 还包括通过L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxxxcross(BR棱+DBL角)的状态.
+- pseudo_xxxcross表示cross(允许D层偏移) + 3个中层棱块(相对于中心) + 3个底层角块(相对于pseudo_cross), 允许该底层角块和该中层棱块不属于同3组F2L. 例如pseudo_xxxcross(BL棱+BR棱+FR棱+BL角+BR角+FL角)
 
 
 
-BL BR FR	BR FR FL	FL	BL
+### pair_analyzer.cpp求解了cross + pair, xcross + pair, xxcross + pair,xxxcross + pair的最少步.
 
-eo_cross_analyzer.cpp求解了eoc(即cross+eo),eoxc(即xcross+eo),eoxxc(即xxcross+eo),eoxxxc(即xxxcross+eo)的最少步.
+- 定义cross + pair. 例如cross + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xcross(BL槽)的状态.
+
+- 定义xcross + pair. 例如xcross(BR槽) + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxcross(BR槽+BL槽)的状态
+
+- 定义xxcross + pair. 例如xxcross(BR槽+FR槽) + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxcross(BL槽+BR槽+FR槽)的状态
+
+- 定义xxxcross + pair. 例如xxxcross(BR槽+FR槽+FL槽) + pair(BL棱+DBL角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成xxxxcross(BL槽+BR槽+FR槽+FL槽)的状态
+
+
+
+### pseudo_pair_analyzer.cpp求解了pseudo_cross + pseudo_pair, pseudo_xcross + pseudo_pair, pseudo_xxcross + pseudo_pair, pseudo_xxxcross + pseudo_pair的最少步.
+
+- 定义pseudo_cross + pseudo_pair, 例如pseudo_cross + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xcross(BL棱+DBR角)的状态
+
+- 定义pseudo_xcross + pseudo_pair, 例如pseudo_xcross(FL棱+DFR角) + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxcross(FL棱+DFR角+BL棱+DBR角)的状态.
+
+- 定义pseudo_xxcross + pseudo_pair, 例如pseudo_xxcross(FL棱+FR棱+DFR角+DBL角) + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxxcross(FL棱+FR棱+DFR角+DBL角+BL棱+DBR角)的状态.
+
+- 定义pseudo_xxxcross + pseudo_pair, 例如pseudo_xxxcross(FL棱+FR棱+BR棱+DFR角+DBL角+DFL角) + pseudo pair(BL棱+DBR角), 表示通过先转动(也可以不转)U层, 然后做(也可以不做)L U L', L U' L', B' U B, B' U' B就能变成pseudo_xxxxcross的状态, 也就是允许D层偏移的xxxxcross.
+
+
+### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
 
 编译和运行：
 ```
