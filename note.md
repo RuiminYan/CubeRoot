@@ -183,3 +183,26 @@ echo scramble.txt | .\analyzer.exe
 
 
 
+
+
+-   **打开 Windows 安全中心 (Windows Security)**：
+    
+    -   在任务栏搜索“Windows 安全中心”并打开。
+        
+-   **进入“病毒和威胁防护”**：
+    
+    -   点击“管理设置” (Manage settings)。
+        
+-   **添加排除项**：
+    
+    -   向下滚动找到“排除项” (Exclusions)，点击“添加或删除排除项”。
+        
+    -   点击“添加排除项” -> 选择“文件夹”。
+        
+    -   **选择您的整个项目目录**：`D:\RubiksSolverDemo` (建议直接排除整个根目录，避免后续生成的 `.exe` 或 `.bin` 文件再次被删)。
+
+
+
+
+
+
