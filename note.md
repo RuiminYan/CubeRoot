@@ -1,5 +1,7 @@
 需要做的优化：移除Emscripten 代码, 实现本地运行，生成移动表(move_table_.bin)和剪枝表(prune_table_.bin)写入硬盘并打印剪枝表的分布，打印Done in X.XXs, 4位打包 (4-bit packing), 只保留聚合数据（最小值）(aggregation)，加入I/O接口, 分支定界（Branch and Bound），级联剪枝（Cascaded Pruning），任务排序 (Task Sorting)，多线程 (OpenMP)，槽位旋转对称性复用 (Slot Conjugation)
 
+可选：使用裸指针 (Raw Pointers) 替代 Vector 引用
+
 加入I/O接口: 输入的文件类型是.txt, 内容的格式为id,打乱, 例如
 22001,B2 U' L2 U F2 L2 D2 L2 U F2 L F2 L D U L' D2 F' U2 B
 23001,D2 U L2 B2 R2 F2 R2 U2 R2 D' R' D B2 U B' R B' D B' L'
