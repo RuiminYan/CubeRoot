@@ -16,7 +16,6 @@ g++ -O3 -fopenmp -march=native analyzer.cpp -o analyzer
 echo scramble.txt | .\analyzer.exe
 ```
 
-
 这里给出了一系列三阶魔方不完整状态的最少步求解器.
 
 ### std_analyzer.cpp求解了cross,xcross,xxcross,xxxcross,xxxxcross的最少步.
@@ -31,8 +30,6 @@ echo scramble.txt | .\analyzer.exe
 
 
 ### eo_cross_analyzer.cpp求解了cross+eo, xcross+eo, xxcross+eo, xxxcross+eo的最少步.
-
-
 
 
 ### pseudo_analyzer.cpp求解了pseudo_cross, pseudo_xcross, pseudo_xxcross, pseudo_xxxcross的最少步.
