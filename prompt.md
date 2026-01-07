@@ -100,6 +100,12 @@ echo scramble.txt | .\analyzer.exe
 10	E10	DF	20
 11	E11	DL	22
 
+### 槽位
+Slot 0 (Base): BL (C4 + E0)
+Slot 1: BR (C5 + E1)
+Slot 2: FR (C6 + E2)
+Slot 3: FL (C7 + E3)
+
 角块位置图
 
               +-------+
